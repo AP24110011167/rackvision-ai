@@ -1,0 +1,33 @@
+{
+  "view_a": {
+    "mae": 21.555246353149414,
+    "max_diff": 137.0,
+    "std_diff": 16.703144073486328,
+    "edge_preservation": 0.8351844152758805,
+    "mean_geom": 157.62481689453125,
+    "mean_enh": 150.71791076660156
+  },
+  "view_b": {
+    "mae": 26.542362213134766,
+    "max_diff": 112.0,
+    "std_diff": 19.830364227294922,
+    "edge_preservation": 0.8274315549902939,
+    "mean_geom": 112.75314331054688,
+    "mean_enh": 125.00244903564453
+  },
+  "view_c": {
+    "mae": 14.410370826721191,
+    "max_diff": 112.0,
+    "std_diff": 17.883399963378906,
+    "edge_preservation": 0.9190800681431005,
+    "mean_geom": 128.3548126220703,
+    "mean_enh": 133.44644165039062
+  },
+  "cross_layout_differentiation": {
+    "p1_vs_p2_view_b_mae": 30.823928833007812,
+    "p1_room_area": 17.28,
+    "p2_room_area": 49.6,
+    "p1_racks": 8,
+    "p2_racks": 12
+  }
+}
