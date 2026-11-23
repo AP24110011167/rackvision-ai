@@ -12,6 +12,7 @@ import { NexusHeroCanvas } from '../components/simulator/NexusHeroCanvas';
 import { BeforeAfterSlider } from '../components/design/BeforeAfterSlider';
 import { Landing3DSimulatorSection } from '../components/simulator/Landing3DSimulatorSection';
 import { ArchitecturalTransformationFilm } from '../components/cinematic/ArchitecturalTransformationFilm';
+import { InteractiveCinematicPipeline } from '../components/cinematic/InteractiveCinematicPipeline';
 import { useSmoothScroll } from '../motion/SmoothScrollProvider';
 import { MagneticButton } from '../motion/MagneticButton';
 import { PerspectiveCard } from '../motion/PerspectiveCard';
@@ -339,117 +340,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           {/* Section Header */}
           <div className="max-w-3xl mb-14">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-ice-blue/10 text-ice-blue text-xs font-mono uppercase tracking-wider mb-4 border border-ice-blue/25">
-              <span>SECTION 03 &bull; COMPUTATIONAL PIPELINE</span>
+              <span>SECTION 03 &bull; COMPUTATIONAL PIPELINE CHOREOGRAPHY</span>
             </div>
             <h2 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-warm-ivory mb-4">
               The 7-Stage Intelligence Pipeline.
             </h2>
             <p className="text-base sm:text-lg text-muted-silver leading-relaxed">
-              Explore the mathematical architecture transforming hand-drawn strokes and CAD drafts into photorealistic engineering twins. Click through each pipeline stage to inspect tensor operations.
+              Explore the verified mathematical architecture transforming raw CAD drafts and sketches into photorealistic engineering twins. Auto-play the sequence or scrub through each stage to inspect live tensor telemetry and edge models.
             </p>
           </div>
 
-          {/* Interactive Pipeline Navigation Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 mb-8">
-            {pipelineStages.map((st, idx) => {
-              const isActive = pipelineStage === idx;
-              return (
-                <button
-                  key={st.id}
-                  onClick={() => setPipelineStage(idx)}
-                  className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-titanium-charcoal border-electric-teal shadow-[0_0_20px_rgba(0,214,201,0.2)]'
-                      : 'bg-graphite/70 border-white/5 hover:border-electric-teal/40 hover:bg-graphite'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className={`text-[10px] font-mono ${isActive ? 'text-electric-teal font-bold' : 'text-muted-silver/50'}`}>
-                      {st.step}
-                    </span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-electric-teal" style={{ opacity: isActive ? 1 : 0.2 }} />
-                  </div>
-                  <div className={`text-xs font-semibold tracking-tight truncate ${isActive ? 'text-warm-ivory' : 'text-muted-silver'}`}>
-                    {st.name}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Stage Detailed Deep Dive Card */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={pipelineStage}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3 }}
-            >
-              <PerspectiveCard className="p-8 border-electric-teal/30 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-xl">
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <span className="px-3 py-1 rounded-md bg-electric-teal/15 text-electric-teal text-xs font-mono font-bold border border-electric-teal/30">
-                      STAGE {pipelineStages[pipelineStage].step}
-                    </span>
-                    <span className="text-xs font-mono text-muted-silver uppercase tracking-wider">
-                      {pipelineStages[pipelineStage].category}
-                    </span>
-                  </div>
-
-                  <h3 className="font-serif text-3xl font-bold text-warm-ivory">
-                    {pipelineStages[pipelineStage].name}
-                  </h3>
-
-                  <p className="text-sm md:text-base text-muted-silver leading-relaxed">
-                    {pipelineStages[pipelineStage].desc}
-                  </p>
-
-                  <div className="p-4 rounded-xl bg-obsidian border border-white/10 font-mono text-xs text-ice-blue space-y-1">
-                    <div className="text-[10px] text-muted-silver/60 uppercase tracking-widest">
-                      SYSTEM EXECUTION TELEMETRY
-                    </div>
-                    <div className="text-controlled-emerald font-medium">
-                      &gt; {pipelineStages[pipelineStage].telemetry}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 bg-obsidian rounded-xl border border-white/10">
-                  <div className="w-full flex items-center justify-between pb-3 border-b border-white/10 mb-4 text-[11px] font-mono text-muted-silver/60">
-                    <span>PIPELINE ARTIFACT</span>
-                    <span className="text-electric-teal">{pipelineStages[pipelineStage].badge}</span>
-                  </div>
-
-                  <img
-                    src={
-                      pipelineStage === 0 ? '/images/p2_cad_floor_plan.png' :
-                      pipelineStage === 1 ? '/images/p2_perspective_conditioning_canny.png' :
-                      pipelineStage === 2 ? '/images/p2_perspective_conditioning_canny.png' :
-                      pipelineStage === 3 ? '/images/p2_perspective_conditioning_canny.png' :
-                      pipelineStage === 4 ? '/images/p2_view_a_elevated_overview_master.png' :
-                      pipelineStage === 5 ? '/images/p2_perspective_conditioning_canny.png' :
-                      '/images/p2_view_b_server_room_master.png'
-                    }
-                    alt={pipelineStages[pipelineStage].name}
-                    className="w-full aspect-video object-cover rounded-xl border border-white/15 shadow-md cursor-pointer hover:scale-[1.02] transition-transform"
-                    onClick={() =>
-                      setLightboxImage({
-                        url: pipelineStage === 0 ? '/images/p2_cad_floor_plan.png' :
-                             pipelineStage === 1 ? '/images/p2_perspective_conditioning_canny.png' :
-                             '/images/p2_view_a_elevated_overview_master.png',
-                        title: pipelineStages[pipelineStage].name,
-                        desc: pipelineStages[pipelineStage].desc,
-                      })
-                    }
-                  />
-                  <span className="text-[10px] font-mono text-muted-silver/60 mt-3">
-                    Click preview image to inspect full-resolution tensor output
-                  </span>
-                </div>
-              </PerspectiveCard>
-            </motion.div>
-          </AnimatePresence>
+          {/* Interactive Cinematic Pipeline Sequence */}
+          <InteractiveCinematicPipeline
+            onOpenLightbox={(img) => setLightboxImage(img)}
+          />
         </div>
       </section>
 
@@ -519,6 +423,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     src="/images/p2_perspective_conditioning_canny.png"
                     alt="Output 1: Technical Architectural Blueprint"
                     className="w-full aspect-[16/10] object-cover rounded-xl border border-electric-teal/30 shadow-2xl cursor-pointer hover:opacity-95 transition-opacity"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = '/images/p2_view_a_elevated_overview_canny.png';
+                    }}
                     onClick={() =>
                       setLightboxImage({
                         url: '/images/p2_perspective_conditioning_canny.png',
@@ -554,6 +461,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     src="/images/p2_view_b_server_room_master.png"
                     alt="Output 2: Photorealistic Interior Preview"
                     className="w-full aspect-[16/10] object-cover rounded-xl border border-ice-blue/30 shadow-2xl cursor-pointer hover:opacity-95 transition-opacity"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = '/images/p2_view_a_elevated_overview_master.png';
+                    }}
                     onClick={() =>
                       setLightboxImage({
                         url: '/images/p2_view_b_server_room_master.png',
@@ -616,6 +526,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       src={viewpointDeliverables[activeViewpoint].url}
                       alt={viewpointDeliverables[activeViewpoint].title}
                       className="w-full aspect-[16/10] object-cover rounded-xl border border-controlled-emerald/30 shadow-2xl"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = '/images/p2_view_a_elevated_overview_master.png';
+                      }}
                     />
                     <button
                       onClick={() =>

@@ -930,6 +930,9 @@ export const AIDesignGeneratorPage: React.FC<AIDesignGeneratorPageProps> = ({
                           src={technicalDesign.image_url}
                           alt="Technical Layout"
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = '/images/p2_perspective_conditioning_canny.png';
+                          }}
                         />
                         <div className="absolute inset-0 bg-[#07090D]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                           <button
@@ -1039,6 +1042,9 @@ export const AIDesignGeneratorPage: React.FC<AIDesignGeneratorPageProps> = ({
                           src={photoDesign.image_url}
                           alt="Photorealistic Preview"
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = '/images/p2_view_b_server_room_master.png';
+                          }}
                         />
                         <div className="absolute inset-0 bg-[#07090D]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                           <button

@@ -20,6 +20,30 @@ const TRANSFORMATION_STEPS = [
   { id: 'pbr_master', label: '6. Master PBR Synthesis', desc: 'SDXL + ControlNet fuses physically based materials and photometric lighting' },
 ];
 
+const COMPARISON_DATA = {
+  view_a: {
+    before: '/images/p2_view_a_elevated_overview_canny.png',
+    after: '/images/p2_view_a_elevated_overview_master.png',
+    label: 'View A: Elevated 3/4 Overview',
+    desc: 'High vantage perspective capturing 49.6 m² white space, Technikspange partition, and containment plenum.',
+    lens: '16mm Equiv • 82° FOV • 1920×1080 Master PBR'
+  },
+  view_b: {
+    before: '/images/p2_view_b_server_room_canny.png',
+    after: '/images/p2_view_b_server_room_master.png',
+    label: 'View B: Server Room Cold Aisle Perspective',
+    desc: 'Eye-level cold aisle perspective along 2 rows of 6 enterprise 42U cabinets with perforated mesh doors and Tate HPL floor.',
+    lens: '35mm Equiv • 76° FOV • 1920×1080 Master PBR'
+  },
+  view_c: {
+    before: '/images/p2_view_c_technical_area_canny.png',
+    after: '/images/p2_view_c_technical_area_master.png',
+    label: 'View C: Technical Area Cooling Plant',
+    desc: 'Dedicated plant showing three 15 kW UKG precision downflow cooling units, ductwork, and interconnecting T30 fire door.',
+    lens: '28mm Equiv • 74° FOV • 1920×1080 Master PBR'
+  }
+};
+
 export const ArchitecturalTransformationFilm: React.FC<ArchitecturalTransformationFilmProps> = ({
   onExpandMaster,
 }) => {
@@ -27,7 +51,7 @@ export const ArchitecturalTransformationFilm: React.FC<ArchitecturalTransformati
   const svgLinesRef = useRef<SVGSVGElement>(null);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [scrubProgress, setScrubProgress] = useState(0);
-  const [sliderPosition, setSliderPosition] = useState(50);
+  const [comparisonView, setComparisonView] = useState<'view_a' | 'view_b' | 'view_c'>('view_a');
 
   useEffect(() => {
     const container = containerRef.current;
@@ -279,13 +303,32 @@ export const ArchitecturalTransformationFilm: React.FC<ArchitecturalTransformati
 
             {/* Stage 4-6: Photorealistic Master Render & Interactive Before/After */}
             {activeStepIndex >= 4 && (
-              <BeforeAfterSlider
-                beforeImage="/images/p2_perspective_conditioning_canny.png"
-                afterImage="/images/p2_view_a_elevated_overview_master.png"
-                beforeLabel="Input CAD Wireframe (ControlNet Canny Lock)"
-                afterLabel="PBR + SDXL Photorealistic Master Render"
-                onExpand={onExpandMaster}
-              />
+              <div className="relative w-full h-full">
+                {/* Viewpoint Perspective Selector Pills */}
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 p-1 rounded-xl bg-[#080B0F]/85 backdrop-blur-md border border-white/20 shadow-xl">
+                  {(['view_a', 'view_b', 'view_c'] as const).map((vKey) => (
+                    <button
+                      key={vKey}
+                      onClick={() => setComparisonView(vKey)}
+                      className={`px-3 py-1 rounded-lg text-[10px] font-mono uppercase transition-all cursor-pointer font-bold ${
+                        comparisonView === vKey
+                          ? 'bg-[#00D6C9] text-[#080B0F] shadow-[0_0_10px_rgba(0,214,201,0.4)]'
+                          : 'text-[#A8B3BC] hover:text-[#F3F1E9]'
+                      }`}
+                    >
+                      {vKey === 'view_a' ? 'View A (Overview)' : vKey === 'view_b' ? 'View B (Cold Aisle)' : 'View C (Cooling Plant)'}
+                    </button>
+                  ))}
+                </div>
+
+                <BeforeAfterSlider
+                  beforeImage={COMPARISON_DATA[comparisonView].before}
+                  afterImage={COMPARISON_DATA[comparisonView].after}
+                  beforeLabel={`${COMPARISON_DATA[comparisonView].label} — 3D ControlNet Canny Lock`}
+                  afterLabel={`${COMPARISON_DATA[comparisonView].label} — 1080p Master PBR`}
+                  onExpand={onExpandMaster}
+                />
+              </div>
             )}
 
             {/* Live Camera Optics HUD Overlay */}

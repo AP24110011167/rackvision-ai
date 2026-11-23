@@ -53,6 +53,9 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         src={afterImage}
         alt={afterLabel}
         className="absolute inset-0 w-full h-full object-cover"
+        onError={(e) => {
+          (e.currentTarget as HTMLImageElement).src = '/images/p2_view_a_elevated_overview_master.png';
+        }}
       />
 
       {/* Before Image (Clipped Layer: Original Floor Plan / Canny Wireframe) */}
@@ -64,6 +67,9 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           src={beforeImage}
           alt={beforeLabel}
           className="absolute inset-0 w-full h-full object-cover max-w-none"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = '/images/p2_perspective_conditioning_canny.png';
+          }}
           style={{
             width: containerRef.current ? `${containerRef.current.offsetWidth}px` : '100%',
             height: '100%',
