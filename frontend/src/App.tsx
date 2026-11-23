@@ -28,6 +28,8 @@ import { SettingsPage } from './pages/SettingsPage';
 import { CinematicIntro } from './components/cinematic/CinematicIntro';
 import { ContinuousUniverseCanvas, UniverseMode } from './components/cinematic/ContinuousUniverseCanvas';
 import { SpatialCursor } from './components/cinematic/SpatialCursor';
+import { SmoothScrollProvider } from './motion/SmoothScrollProvider';
+import { CinematicPageTransition } from './motion/CinematicPageTransition';
 import { LandingPage } from './pages/LandingPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
@@ -717,18 +719,22 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#080B0F] text-[#F3F1E9] font-sans selection:bg-[#00D6C9]/20 selection:text-[#00D6C9] overflow-x-hidden">
-      {/* Living Particle Universe & Architectural Energy Field */}
-      <ContinuousUniverseCanvas mode={universeMode} mousePosRef={mousePosRef} />
+    <SmoothScrollProvider enabled={currentRoute === 'landing' || currentRoute === 'workspace'}>
+      <div className="relative min-h-screen w-full bg-[#080B0F] text-[#F3F1E9] font-sans selection:bg-[#00D6C9]/20 selection:text-[#00D6C9] overflow-x-hidden">
+        {/* Living Particle Universe & Architectural Energy Field */}
+        <ContinuousUniverseCanvas mode={universeMode} mousePosRef={mousePosRef} />
 
-      {/* Precision Spatial Reticle Cursor */}
-      <SpatialCursor mousePosRef={mousePosRef} />
+        {/* Precision Spatial Reticle Cursor */}
+        <SpatialCursor mousePosRef={mousePosRef} />
 
-      {/* Active Application Layer */}
-      <div className="relative z-10 w-full min-h-screen">
-        {renderContent()}
+        {/* Active Application Layer with Cinematic Transitions */}
+        <div className="relative z-10 w-full min-h-screen">
+          <CinematicPageTransition pageKey={currentRoute === 'workspace' ? currentTab : currentRoute}>
+            {renderContent()}
+          </CinematicPageTransition>
+        </div>
       </div>
-    </div>
+    </SmoothScrollProvider>
   );
 };
 

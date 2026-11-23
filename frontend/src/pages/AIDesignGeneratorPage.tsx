@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GeneratedDesign, SketchData } from '../types';
 import { BeforeAfterSlider } from '../components/design/BeforeAfterSlider';
 import { api } from '../services/api';
+import { MagneticButton } from '../motion/MagneticButton';
+import { PerspectiveCard } from '../motion/PerspectiveCard';
 import {
   Wand2, Sparkles, Camera, Layers, Cpu, Download, RefreshCw,
   Eye, Sliders, Maximize2, X, Compass, CheckCircle2, AlertCircle,
@@ -547,14 +549,16 @@ export const AIDesignGeneratorPage: React.FC<AIDesignGeneratorPageProps> = ({
           {/* Master Generation Buttons */}
           <div className="space-y-2.5 pt-4 border-t border-[#C9D3DB]/12">
             {/* Primary Action: Generate All 3 Outputs */}
-            <button
+            <MagneticButton
               onClick={handleGenerateAllThree}
               disabled={isGeneratingAny}
-              className="btn-nexus-teal w-full py-3.5 rounded-lg font-semibold text-xs font-mono-code tracking-wider uppercase shadow-[0_0_20px_rgba(0,229,204,0.25)] transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
+              variant="primary"
+              size="md"
+              className="w-full !py-3.5 tracking-wider uppercase font-mono-code font-bold"
+              icon={<Sparkles className={`w-4 h-4 ${isGeneratingAny ? 'animate-spin' : ''}`} />}
             >
-              <Sparkles className={`w-4 h-4 ${isGeneratingAny ? 'animate-spin' : ''}`} />
-              <span>{isGeneratingAny ? 'Synthesizing All 3 Outputs...' : 'Generate All 3 Outputs'}</span>
-            </button>
+              {isGeneratingAny ? 'Synthesizing All 3 Outputs...' : 'Generate All 3 Outputs'}
+            </MagneticButton>
 
             {/* Sub-buttons for individual generation */}
             <div className="grid grid-cols-3 gap-2">

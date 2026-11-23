@@ -4,6 +4,8 @@ import {
   Thermometer, AlertTriangle, RefreshCw, CheckCircle,
   ChevronDown, ChevronUp, Loader2, Snowflake, Flame, Activity
 } from 'lucide-react';
+import { PerspectiveCard } from '../motion/PerspectiveCard';
+import { MagneticButton } from '../motion/MagneticButton';
 
 interface RackTemp {
   rack_id: string;
@@ -262,14 +264,15 @@ export const ThermalSimulationPage: React.FC<ThermalSimulationPageProps> = ({ ac
           </p>
         </div>
 
-        <button
+        <MagneticButton
           onClick={fetchThermal}
           disabled={loading}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-titanium-charcoal/80 hover:bg-titanium-charcoal border border-white/10 hover:border-electric-teal/40 text-warm-ivory text-xs font-mono transition-colors cursor-pointer shadow-xs"
+          variant="secondary"
+          size="sm"
+          icon={<RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-electric-teal' : ''}`} />}
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-electric-teal' : ''}`} />
-          <span>Reload Simulation</span>
-        </button>
+          Reload Simulation
+        </MagneticButton>
       </div>
 
       {/* Main Content */}
@@ -285,13 +288,13 @@ export const ThermalSimulationPage: React.FC<ThermalSimulationPageProps> = ({ ac
             ].map((kpi, i) => {
               const Icon = kpi.icon;
               return (
-                <div key={kpi.label} className="p-5 rounded-2xl border border-white/10 bg-graphite/80 backdrop-blur-md space-y-1 shadow-lg">
+                <PerspectiveCard key={kpi.label} className="p-5 space-y-1 shadow-lg">
                   <div className="flex items-center justify-between text-xs font-mono text-muted-silver">
                     <span>{kpi.label}</span>
                     <Icon className="w-3.5 h-3.5" />
                   </div>
                   <div className={`text-2xl font-bold font-serif ${kpi.color}`}>{kpi.value}</div>
-                </div>
+                </PerspectiveCard>
               );
             })}
           </div>

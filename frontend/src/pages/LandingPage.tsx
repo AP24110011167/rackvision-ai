@@ -11,6 +11,11 @@ import {
 import { NexusHeroCanvas } from '../components/simulator/NexusHeroCanvas';
 import { BeforeAfterSlider } from '../components/design/BeforeAfterSlider';
 import { Landing3DSimulatorSection } from '../components/simulator/Landing3DSimulatorSection';
+import { ArchitecturalTransformationFilm } from '../components/cinematic/ArchitecturalTransformationFilm';
+import { useSmoothScroll } from '../motion/SmoothScrollProvider';
+import { MagneticButton } from '../motion/MagneticButton';
+import { PerspectiveCard } from '../motion/PerspectiveCard';
+import { TextMaskReveal } from '../motion/TextMaskReveal';
 
 interface LandingPageProps {
   onStartProject: () => void;
@@ -27,6 +32,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   onNavigateToAdmin,
   onReplayIntro,
 }) => {
+  const { scrollTo } = useSmoothScroll();
+
   // Navigation & Interactive states
   const [activeTabOutput, setActiveTabOutput] = useState<'output1' | 'output2' | 'output3'>('output3');
   const [activeViewpoint, setActiveViewpoint] = useState<'view_a' | 'view_b' | 'view_c'>('view_a');
@@ -151,16 +158,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </div>
 
-          {/* Editorial Nav Links */}
+          {/* Editorial Nav Links with Smooth Inertial Scrolling */}
           <nav className="hidden xl:flex items-center gap-7 text-xs font-mono uppercase tracking-wider text-muted-silver">
-            <a href="#hero-studio" className="hover:text-electric-teal transition-colors">01. Hero</a>
-            <a href="#transformation" className="hover:text-electric-teal transition-colors">02. Blueprint</a>
-            <a href="#intelligence-engine" className="hover:text-electric-teal transition-colors">03. Pipeline</a>
-            <a href="#generative-suite" className="hover:text-electric-teal transition-colors">04. Generative</a>
-            <a href="#3d-simulator" className="hover:text-electric-teal transition-colors">05. 3D Twin</a>
-            <a href="#thermal-cfd" className="hover:text-electric-teal transition-colors">06. CFD</a>
-            <a href="#optimization" className="hover:text-electric-teal transition-colors">07. ASHRAE</a>
-            <a href="#construction-bom" className="hover:text-electric-teal transition-colors">08. Delivery</a>
+            <button onClick={() => scrollTo('#hero-studio')} className="hover:text-electric-teal transition-colors cursor-pointer">01. Hero</button>
+            <button onClick={() => scrollTo('#transformation')} className="hover:text-electric-teal transition-colors cursor-pointer">02. Blueprint</button>
+            <button onClick={() => scrollTo('#intelligence-engine')} className="hover:text-electric-teal transition-colors cursor-pointer">03. Pipeline</button>
+            <button onClick={() => scrollTo('#generative-suite')} className="hover:text-electric-teal transition-colors cursor-pointer">04. Generative</button>
+            <button onClick={() => scrollTo('#3d-simulator')} className="hover:text-electric-teal transition-colors cursor-pointer">05. 3D Twin</button>
+            <button onClick={() => scrollTo('#thermal-cfd')} className="hover:text-electric-teal transition-colors cursor-pointer">06. CFD</button>
+            <button onClick={() => scrollTo('#optimization')} className="hover:text-electric-teal transition-colors cursor-pointer">07. ASHRAE</button>
+            <button onClick={() => scrollTo('#construction-bom')} className="hover:text-electric-teal transition-colors cursor-pointer">08. Delivery</button>
           </nav>
 
           {/* Action CTAs */}
@@ -192,13 +199,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <span>Admin</span>
             </button>
 
-            <button
+            <MagneticButton
               onClick={onStartProject}
-              className="btn-primary-teal px-5 py-2.5 rounded-lg text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-2 group cursor-pointer shadow-[0_0_15px_rgba(0,214,201,0.25)]"
+              variant="primary"
+              size="sm"
+              icon={<ArrowRight className="w-3.5 h-3.5" />}
             >
-              <span>Explore Studio</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </button>
+              Explore Studio
+            </MagneticButton>
           </div>
         </div>
       </header>
@@ -249,24 +257,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center gap-4 mb-14"
           >
-            <button
+            <MagneticButton
               onClick={onStartProject}
-              className="btn-primary-teal px-8 py-4 rounded-xl text-xs font-mono font-bold tracking-wider uppercase flex items-center gap-3 cursor-pointer shadow-[0_0_30px_rgba(0,214,201,0.3)] w-full sm:w-auto justify-center"
+              variant="primary"
+              size="lg"
+              icon={<ArrowRight className="w-4 h-4" />}
             >
-              <span>EXPLORE THE ENGINEERING STUDIO</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              EXPLORE THE ENGINEERING STUDIO
+            </MagneticButton>
 
-            <button
-              onClick={() => {
-                const target = document.getElementById('transformation');
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="px-8 py-4 rounded-xl text-xs font-mono font-semibold tracking-wider uppercase flex items-center gap-3 cursor-pointer w-full sm:w-auto justify-center bg-titanium-charcoal/80 hover:bg-titanium-charcoal border border-white/10 hover:border-electric-teal/40 text-warm-ivory transition-all shadow-sm"
+            <MagneticButton
+              onClick={() => scrollTo('#transformation')}
+              variant="secondary"
+              size="lg"
+              icon={<Play className="w-4 h-4 text-[#00D6C9]" />}
             >
-              <Play className="w-4 h-4 text-electric-teal" />
-              <span>WATCH THE EXPERIENCE</span>
-            </button>
+              WATCH THE EXPERIENCE
+            </MagneticButton>
           </motion.div>
         </div>
 
@@ -277,9 +284,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
         {/* Scroll Indicator */}
         <div className="max-w-7xl mx-auto w-full pt-10 flex flex-col items-center">
-          <a
-            href="#transformation"
-            className="flex flex-col items-center gap-2 text-muted-silver/60 hover:text-electric-teal transition-colors font-mono text-xs uppercase tracking-widest group"
+          <button
+            onClick={() => scrollTo('#transformation')}
+            className="flex flex-col items-center gap-2 text-muted-silver/60 hover:text-electric-teal transition-colors font-mono text-xs uppercase tracking-widest group cursor-pointer"
           >
             <span>SCROLL TO EXPLORE ARCHITECTURAL JOURNEY</span>
             <div className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center p-1 group-hover:border-electric-teal">
@@ -289,93 +296,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 className="w-1.5 h-2 rounded-full bg-electric-teal"
               />
             </div>
-          </a>
+          </button>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────────────────
-          SECTION 02 — ARCHITECTURAL TRANSFORMATION
+          SECTION 02 — ARCHITECTURAL TRANSFORMATION FILM
           ───────────────────────────────────────────────────────────────────────────── */}
       <section id="transformation" className="py-28 px-6 border-t border-white/10 bg-graphite/40 relative">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="max-w-3xl mb-14">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-electric-teal/10 text-electric-teal text-xs font-mono uppercase tracking-wider mb-4 border border-electric-teal/25">
-              <span>SECTION 02 &bull; GROUND-TRUTH RECONSTRUCTION</span>
+              <span>SECTION 02 &bull; GROUND-TRUTH RECONSTRUCTION FILM</span>
             </div>
             <h2 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-warm-ivory mb-4">
               From Blueprint Sketch to Photorealistic Digital Twin.
             </h2>
             <p className="text-base sm:text-lg text-muted-silver leading-relaxed">
-              Every data center generation is anchored directly to physical geometry. Inspect the exact CAD coordinate lock comparing the architectural layout plan with the synthesized 1080p master render.
+              Every data center generation is anchored directly to physical geometry. Scrub through the continuous transformation film comparing the raw CAD blueprint vectors with the synthesized 1080p master render.
             </p>
           </div>
 
-          {/* Interactive Before & After Slider */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <BeforeAfterSlider
-                beforeImage="/images/p2_perspective_conditioning_canny.png"
-                afterImage="/images/p2_view_a_elevated_overview_master.png"
-                beforeLabel="Input CAD Edge Wireframe (OpenCV Canny)"
-                afterLabel="PBR + SDXL Master Architectural Render"
-                onExpand={() =>
-                  setLightboxImage({
-                    url: '/images/p2_view_a_elevated_overview_master.png',
-                    title: 'Output 3: Master Architectural Render',
-                    desc: '49.6 m² Serverraum with dual rows of 6 enterprise 42U racks, hot aisle containment, and Technikspange plant.',
-                  })
-                }
-              />
-            </div>
-
-            {/* Architectural Telemetry Breakdown */}
-            <div className="lg:col-span-4 flex flex-col gap-4">
-              <div className="p-6 rounded-2xl border border-white/10 bg-graphite/80 backdrop-blur-md shadow-xl">
-                <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
-                  <span className="text-xs font-mono text-electric-teal uppercase tracking-wider font-semibold">
-                    PHYSICAL FACILITY SPECS
-                  </span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-controlled-emerald/15 text-controlled-emerald border border-controlled-emerald/30 font-bold">
-                    VERIFIED
-                  </span>
-                </div>
-
-                <div className="space-y-3.5 text-xs font-mono text-muted-silver">
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-silver/60">Room Footprint</span>
-                    <span className="text-warm-ivory font-semibold">8.27m × 6.0m (49.6 m²)</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-silver/60">Server Cabinets</span>
-                    <span className="text-electric-teal font-bold">12 Racks (2 Rows of 6, 42U)</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-silver/60">Cooling System</span>
-                    <span className="text-warm-ivory font-semibold">3× 15 kW UKG Precision CRAC</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-silver/60">Containment Geometry</span>
-                    <span className="text-ice-blue">1.5m Dedicated Hot Aisle</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-silver/60">Fire Separation</span>
-                    <span className="text-warm-ivory">T30 Partition Wall</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-silver/60">Geometric Lock</span>
-                    <span className="text-controlled-emerald font-bold">±0.0mm Coordinate Tolerance</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-5 rounded-2xl border-l-4 border-l-electric-teal bg-titanium-charcoal/60 border border-white/10">
-                <p className="text-xs text-muted-silver leading-relaxed">
-                  <strong className="text-warm-ivory">Zero Hallucination Guarantee:</strong> The ControlNet Canny pipeline extracts bounding coordinates from the uploaded blueprint and locks every rack cabinet into fixed 3D space before diffusion sampling begins.
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* Continuous Architectural Transformation Film */}
+          <ArchitecturalTransformationFilm
+            onExpandMaster={() =>
+              setLightboxImage({
+                url: '/images/p2_view_a_elevated_overview_master.png',
+                title: 'Output 3: Master Architectural Render',
+                desc: '49.6 m² Serverraum with dual rows of 6 enterprise 42U racks, hot aisle containment, and Technikspange plant.',
+              })
+            }
+          />
         </div>
       </section>
 
@@ -433,68 +385,69 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.3 }}
-              className="p-8 rounded-2xl border border-electric-teal/30 bg-graphite/80 backdrop-blur-md grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-xl"
             >
-              <div className="lg:col-span-7 space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 rounded-md bg-electric-teal/15 text-electric-teal text-xs font-mono font-bold border border-electric-teal/30">
-                    STAGE {pipelineStages[pipelineStage].step}
-                  </span>
-                  <span className="text-xs font-mono text-muted-silver uppercase tracking-wider">
-                    {pipelineStages[pipelineStage].category}
-                  </span>
-                </div>
-
-                <h3 className="font-serif text-3xl font-bold text-warm-ivory">
-                  {pipelineStages[pipelineStage].name}
-                </h3>
-
-                <p className="text-sm md:text-base text-muted-silver leading-relaxed">
-                  {pipelineStages[pipelineStage].desc}
-                </p>
-
-                <div className="p-4 rounded-xl bg-obsidian border border-white/10 font-mono text-xs text-ice-blue space-y-1">
-                  <div className="text-[10px] text-muted-silver/60 uppercase tracking-widest">
-                    SYSTEM EXECUTION TELEMETRY
+              <PerspectiveCard className="p-8 border-electric-teal/30 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-xl">
+                <div className="lg:col-span-7 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <span className="px-3 py-1 rounded-md bg-electric-teal/15 text-electric-teal text-xs font-mono font-bold border border-electric-teal/30">
+                      STAGE {pipelineStages[pipelineStage].step}
+                    </span>
+                    <span className="text-xs font-mono text-muted-silver uppercase tracking-wider">
+                      {pipelineStages[pipelineStage].category}
+                    </span>
                   </div>
-                  <div className="text-controlled-emerald font-medium">
-                    &gt; {pipelineStages[pipelineStage].telemetry}
+
+                  <h3 className="font-serif text-3xl font-bold text-warm-ivory">
+                    {pipelineStages[pipelineStage].name}
+                  </h3>
+
+                  <p className="text-sm md:text-base text-muted-silver leading-relaxed">
+                    {pipelineStages[pipelineStage].desc}
+                  </p>
+
+                  <div className="p-4 rounded-xl bg-obsidian border border-white/10 font-mono text-xs text-ice-blue space-y-1">
+                    <div className="text-[10px] text-muted-silver/60 uppercase tracking-widest">
+                      SYSTEM EXECUTION TELEMETRY
+                    </div>
+                    <div className="text-controlled-emerald font-medium">
+                      &gt; {pipelineStages[pipelineStage].telemetry}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 bg-obsidian rounded-xl border border-white/10">
-                <div className="w-full flex items-center justify-between pb-3 border-b border-white/10 mb-4 text-[11px] font-mono text-muted-silver/60">
-                  <span>PIPELINE ARTIFACT</span>
-                  <span className="text-electric-teal">{pipelineStages[pipelineStage].badge}</span>
+                <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 bg-obsidian rounded-xl border border-white/10">
+                  <div className="w-full flex items-center justify-between pb-3 border-b border-white/10 mb-4 text-[11px] font-mono text-muted-silver/60">
+                    <span>PIPELINE ARTIFACT</span>
+                    <span className="text-electric-teal">{pipelineStages[pipelineStage].badge}</span>
+                  </div>
+
+                  <img
+                    src={
+                      pipelineStage === 0 ? '/images/p2_cad_floor_plan.png' :
+                      pipelineStage === 1 ? '/images/p2_perspective_conditioning_canny.png' :
+                      pipelineStage === 2 ? '/images/p2_perspective_conditioning_canny.png' :
+                      pipelineStage === 3 ? '/images/p2_perspective_conditioning_canny.png' :
+                      pipelineStage === 4 ? '/images/p2_view_a_elevated_overview_master.png' :
+                      pipelineStage === 5 ? '/images/p2_perspective_conditioning_canny.png' :
+                      '/images/p2_view_b_server_room_master.png'
+                    }
+                    alt={pipelineStages[pipelineStage].name}
+                    className="w-full aspect-video object-cover rounded-xl border border-white/15 shadow-md cursor-pointer hover:scale-[1.02] transition-transform"
+                    onClick={() =>
+                      setLightboxImage({
+                        url: pipelineStage === 0 ? '/images/p2_cad_floor_plan.png' :
+                             pipelineStage === 1 ? '/images/p2_perspective_conditioning_canny.png' :
+                             '/images/p2_view_a_elevated_overview_master.png',
+                        title: pipelineStages[pipelineStage].name,
+                        desc: pipelineStages[pipelineStage].desc,
+                      })
+                    }
+                  />
+                  <span className="text-[10px] font-mono text-muted-silver/60 mt-3">
+                    Click preview image to inspect full-resolution tensor output
+                  </span>
                 </div>
-
-                <img
-                  src={
-                    pipelineStage === 0 ? '/images/p2_cad_floor_plan.png' :
-                    pipelineStage === 1 ? '/images/p2_perspective_conditioning_canny.png' :
-                    pipelineStage === 2 ? '/images/p2_perspective_conditioning_canny.png' :
-                    pipelineStage === 3 ? '/images/p2_perspective_conditioning_canny.png' :
-                    pipelineStage === 4 ? '/images/p2_view_a_elevated_overview_master.png' :
-                    pipelineStage === 5 ? '/images/p2_perspective_conditioning_canny.png' :
-                    '/images/p2_view_b_server_room_master.png'
-                  }
-                  alt={pipelineStages[pipelineStage].name}
-                  className="w-full aspect-video object-cover rounded-xl border border-white/15 shadow-md cursor-pointer hover:scale-[1.02] transition-transform"
-                  onClick={() =>
-                    setLightboxImage({
-                      url: pipelineStage === 0 ? '/images/p2_cad_floor_plan.png' :
-                           pipelineStage === 1 ? '/images/p2_perspective_conditioning_canny.png' :
-                           '/images/p2_view_a_elevated_overview_master.png',
-                      title: pipelineStages[pipelineStage].name,
-                      desc: pipelineStages[pipelineStage].desc,
-                    })
-                  }
-                />
-                <span className="text-[10px] font-mono text-muted-silver/60 mt-3">
-                  Click preview image to inspect full-resolution tensor output
-                </span>
-              </div>
+              </PerspectiveCard>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -1044,20 +997,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <button
+            <MagneticButton
               onClick={onStartProject}
-              className="btn-primary-teal px-8 py-4 rounded-xl text-xs font-mono font-bold tracking-wider uppercase flex items-center gap-3 cursor-pointer shadow-[0_0_30px_rgba(0,214,201,0.35)] w-full sm:w-auto justify-center"
+              variant="primary"
+              size="lg"
+              icon={<ArrowRight className="w-4 h-4" />}
             >
-              <span>START YOUR PROJECT</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              START YOUR PROJECT
+            </MagneticButton>
 
-            <button
+            <MagneticButton
               onClick={() => onNavigateToAuth('register')}
-              className="px-8 py-4 rounded-xl text-xs font-mono font-semibold tracking-wider uppercase flex items-center gap-3 cursor-pointer w-full sm:w-auto justify-center bg-titanium-charcoal/80 hover:bg-titanium-charcoal border border-white/10 hover:border-electric-teal/40 text-warm-ivory transition-all shadow-sm"
+              variant="secondary"
+              size="lg"
             >
-              <span>EXPLORE THE PLATFORM</span>
-            </button>
+              EXPLORE THE PLATFORM
+            </MagneticButton>
           </div>
         </div>
       </section>
