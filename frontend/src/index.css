@@ -240,7 +240,12 @@
   pointer-events: none;
 }
 
-/* Lenis Smooth Scroll Core */
+/* Lenis Smooth Scroll Core & Native Viewport Scroll */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -251,7 +256,7 @@ html.lenis, html.lenis body {
   overscroll-behavior: contain;
 }
 .lenis.lenis-stopped {
-  overflow: hidden;
+  overflow: visible;
 }
 .lenis.lenis-smooth iframe {
   pointer-events: none;

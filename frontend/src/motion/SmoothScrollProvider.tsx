@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import Lenis from 'lenis';
 import { gsap, ScrollTrigger } from './motionEngine';
 
@@ -33,52 +33,89 @@ export const SmoothScrollProvider: React.FC<SmoothScrollProviderProps> = ({
   useEffect(() => {
     // Respect user's motion preferences
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // Fallback native scroll listener for GSAP ScrollTrigger
+    const handleNativeScroll = () => {
+      ScrollTrigger.update();
+    };
+
     if (!enabled || prefersReducedMotion) {
-      return;
+      window.addEventListener('scroll', handleNativeScroll, { passive: true });
+      return () => {
+        window.removeEventListener('scroll', handleNativeScroll);
+      };
     }
 
+    /**
+     * CRITICAL SCROLL ARCHITECTURE FIX:
+     * - `smoothWheel: false`: Do NOT intercept or call preventDefault() on mouse-wheel or touchpad gestures.
+     *   The browser's hardware-accelerated, natural wheel and touchpad scrolling remains 100% active.
+     * - `syncTouch: false`: Retain native mobile/touchpad gesture fluidity and inertia.
+     * - `autoRaf: true`: Let Lenis manage its internal animation loop smoothly for programmatic `.scrollTo()`.
+     * - `prevent`: Automatically bypass any inner scrollable containers, inputs, or canvas overlays.
+     * - Synchronize GSAP ScrollTrigger directly on both Lenis scroll and native window scroll.
+     */
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      smoothWheel: false,
+      syncTouch: false,
+      autoRaf: true,
+      autoResize: true,
+      prevent: (node: HTMLElement) => {
+        return (
+          node.tagName === 'INPUT' ||
+          node.tagName === 'TEXTAREA' ||
+          node.tagName === 'SELECT' ||
+          node.tagName === 'CANVAS' ||
+          node.hasAttribute?.('data-lenis-prevent') ||
+          Boolean(node.closest?.('[data-lenis-prevent], main, nav, .overflow-y-auto, .overflow-auto'))
+        );
+      },
     });
 
     lenisRef.current = lenis;
     setLenisInstance(lenis);
 
-    // Synchronize Lenis scroll position with GSAP ScrollTrigger
+    // Keep GSAP ScrollTrigger 100% in sync with scroll position
     lenis.on('scroll', ScrollTrigger.update);
+    window.addEventListener('scroll', handleNativeScroll, { passive: true });
 
-    // Use GSAP's high-performance RAF ticker for Lenis
-    const updateRaf = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(updateRaf);
-    gsap.ticker.lagSmoothing(0);
-
-    // Refresh ScrollTrigger after DOM settlements
-    const refreshTimer = setTimeout(() => {
+    // Refresh ScrollTrigger and resize Lenis after initial DOM elements and images mount
+    const timer1 = setTimeout(() => {
+      lenis.resize();
       ScrollTrigger.refresh();
-    }, 200);
+    }, 150);
+
+    const timer2 = setTimeout(() => {
+      lenis.resize();
+      ScrollTrigger.refresh();
+    }, 600);
+
+    const handleResize = () => {
+      lenis.resize();
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
-      clearTimeout(refreshTimer);
-      gsap.ticker.remove(updateRaf);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleNativeScroll);
       lenis.destroy();
       lenisRef.current = null;
       setLenisInstance(null);
     };
   }, [enabled]);
 
-  const scrollTo = (target: string | HTMLElement | number, options?: any) => {
+  const scrollTo = useCallback((target: string | HTMLElement | number, options?: any) => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(target, {
         offset: 0,
-        duration: 1.4,
+        duration: 1.2,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         ...options,
       });
@@ -93,10 +130,15 @@ export const SmoothScrollProvider: React.FC<SmoothScrollProviderProps> = ({
         target.scrollIntoView({ behavior: 'smooth' });
       }
     }
-  };
+  }, []);
 
-  const stop = () => lenisRef.current?.stop();
-  const start = () => lenisRef.current?.start();
+  const stop = useCallback(() => {
+    lenisRef.current?.stop();
+  }, []);
+
+  const start = useCallback(() => {
+    lenisRef.current?.start();
+  }, []);
 
   return (
     <SmoothScrollContext.Provider

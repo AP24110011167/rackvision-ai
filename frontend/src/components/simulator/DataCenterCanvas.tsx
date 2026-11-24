@@ -311,7 +311,7 @@ export const DataCenterCanvas: React.FC<DataCenterCanvasProps> = ({
   const { room_dims, racks, cooling_units, pdus, cable_trays } = sceneConfig;
 
   return (
-    <div className="w-full h-full relative bg-[#07090D] select-none">
+    <div className="w-full h-full relative bg-[#07090D] select-none" data-lenis-prevent>
       <Canvas
         camera={{ position: [12, 10, 16], fov: 48 }}
         shadows

@@ -719,7 +719,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <SmoothScrollProvider enabled={currentRoute === 'landing' || currentRoute === 'workspace'}>
+    <SmoothScrollProvider enabled={currentRoute === 'landing'}>
       <div className="relative min-h-screen w-full bg-[#080B0F] text-[#F3F1E9] font-sans selection:bg-[#00D6C9]/20 selection:text-[#00D6C9] overflow-x-hidden">
         {/* Living Particle Universe & Architectural Energy Field */}
         <ContinuousUniverseCanvas mode={universeMode} mousePosRef={mousePosRef} />
