@@ -261,6 +261,7 @@ export interface AnalyticsData {
   facility_total_power_kw: number;
   required_cooling_kw: number;
   installed_cooling_kw: number;
+  cooling_capacity_kw?: number;
   cooling_capacity_tons: number;
   cooling_redundancy: string;
   heat_dissipation_btu_hr: number;

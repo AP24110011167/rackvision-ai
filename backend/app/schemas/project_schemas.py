@@ -216,14 +216,18 @@ class AnalyticsResponse(BaseModel):
     space_utilization_percent: float
     rack_density_kw_per_rack: float
     total_it_power_kw: float
-    cooling_capacity_kw: float
-    cooling_capacity_tons: float
-    heat_dissipation_btu_hr: float
-    annual_energy_consumption_mwh: float
-    cable_requirements_meters: Dict[str, float]
-    estimated_pue: float
-    pue_breakdown: Dict[str, float]
-    carbon_footprint_tonnes_yr: float
+    facility_total_power_kw: float = 0.0
+    required_cooling_kw: float = 0.0
+    installed_cooling_kw: float = 0.0
+    cooling_capacity_kw: float = 0.0
+    cooling_capacity_tons: float = 0.0
+    cooling_redundancy: str = "N+1 Redundant"
+    heat_dissipation_btu_hr: float = 0.0
+    annual_energy_consumption_mwh: float = 0.0
+    cable_requirements_meters: Dict[str, float] = Field(default_factory=dict)
+    estimated_pue: float = 1.22
+    pue_breakdown: Dict[str, float] = Field(default_factory=dict)
+    carbon_footprint_tonnes_yr: float = 0.0
 
 class OptimizationSuggestion(BaseModel):
     id: str

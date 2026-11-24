@@ -238,9 +238,12 @@ export const App: React.FC = () => {
           const current = projList[0];
           setActiveProject(current);
           await loadProjectData(current.id);
+        } else {
+          await loadProjectData('proj-helios-01');
         }
       } catch (err) {
         console.error('Initialization error:', err);
+        await loadProjectData('proj-helios-01').catch(() => {});
       } finally {
         setLoading(false);
       }
@@ -681,7 +684,15 @@ export const App: React.FC = () => {
 
               {/* Page 9: Data Center Analytics */}
               {currentTab === 'analytics' && (
-                <AnalyticsPage analytics={analytics} />
+                <AnalyticsPage
+                  analytics={analytics}
+                  activeProjectId={activeProject?.id || 'proj-helios-01'}
+                  onRefreshAnalytics={async () => {
+                    const pid = activeProject?.id || 'proj-helios-01';
+                    const an = await api.getAnalytics(pid);
+                    setAnalytics(an);
+                  }}
+                />
               )}
 
               {/* Page 10: Design Optimizer */}

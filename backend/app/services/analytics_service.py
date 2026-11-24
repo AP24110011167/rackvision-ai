@@ -105,6 +105,7 @@ class AnalyticsService:
             "facility_total_power_kw": round(facility_power_kw, 1),
             "required_cooling_kw": required_cooling_kw,
             "installed_cooling_kw": installed_cooling_kw,
+            "cooling_capacity_kw": installed_cooling_kw,
             "cooling_capacity_tons": cooling_capacity_tons,
             "cooling_redundancy": "N+1 Redundant" if installed_cooling_kw >= required_cooling_kw * 1.25 else "N Redundant",
             "heat_dissipation_btu_hr": heat_dissipation_btu,
