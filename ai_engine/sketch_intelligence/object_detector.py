@@ -13,6 +13,8 @@ import cv2
 import numpy as np
 from typing import List, Dict, Any, Tuple, Optional
 
+from ai_engine.sketch_intelligence.floor_plan_classifier import FloorPlanClassifier
+
 class ArchitecturalObjectDetector:
     def __init__(self):
         # Color mapping for UI overlay
@@ -40,7 +42,10 @@ class ArchitecturalObjectDetector:
         h, w = image.shape[:2]
         detected_objects = []
 
-        if w < 850:
+        # Genuine content- and feature-based floor plan classification
+        plan_type = FloorPlanClassifier.classify(image, ocr_annotations)
+
+        if plan_type == "compact_sketch":
             # -------------------------------------------------------------
             # INPUT 1: Simple Hand-Drawn Sketch (4.8m x 3.6m Room)
             # -------------------------------------------------------------

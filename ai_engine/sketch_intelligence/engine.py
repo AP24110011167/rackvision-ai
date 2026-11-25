@@ -77,7 +77,8 @@ class SketchIntelligenceEngine:
             source_image_name=Path(image_path).name,
             detected_objects=detected_objects,
             ocr_annotations=ocr_annotations,
-            image_shape=original.shape
+            image_shape=original.shape,
+            image=original
         )
 
         def clean_json_types(obj):

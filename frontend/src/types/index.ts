@@ -117,6 +117,8 @@ export interface GeneratedDesign {
   model_name?: string;
   layout_version?: string;
   upscaled?: boolean;
+  canny_url?: string;
+  comparison_url?: string;
   generation_status?: string;
   inference_latency_ms?: number;
 }

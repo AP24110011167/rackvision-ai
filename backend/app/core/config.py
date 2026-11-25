@@ -22,8 +22,8 @@ class Settings(BaseModel):
     SKETCHES_DIR: Path = SKETCHES_DIR
     DESIGNS_DIR: Path = DESIGNS_DIR
     REPORTS_DIR: Path = REPORTS_DIR
-    HOST: str = "127.0.0.1"
-    PORT: int = 8000
+    HOST: str = os.getenv("HOST", "0.0.0.0")
+    PORT: int = int(os.getenv("PORT", "8000"))
     CORS_ORIGINS: list[str] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",

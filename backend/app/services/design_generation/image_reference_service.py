@@ -47,12 +47,15 @@ class ImageReferenceService:
         """
         from app.services.layout_service import LayoutService
         from app.services.design_generation.geometry_reconstruction_service import GeometryReconstructionService
+        import hashlib
+        import json
 
         sketches_dir = settings.SKETCHES_DIR
         sketches_dir.mkdir(parents=True, exist_ok=True)
-        target_canny_path = sketches_dir / f"{project_id}_3d_structural_canny.png"
-
         layout = LayoutService.get_layout(project_id)
+        layout_hash = hashlib.sha256(json.dumps(layout, sort_keys=True).encode()).hexdigest()[:10] if layout else "nolayout"
+        target_canny_path = sketches_dir / f"{project_id}_{layout_hash}_{camera_viewpoint}_canny.png"
+
         canny_img = GeometryReconstructionService.generate_canny_conditioning_image(
             layout=layout,
             width=width,
@@ -77,12 +80,12 @@ class ImageReferenceService:
         designs_dir = settings.DESIGNS_DIR
         sketches_dir = settings.SKETCHES_DIR
 
-        # 1. Search for existing Output 2 Photorealistic Preview
+        # 1. Search for existing Output 2 Photorealistic Preview strictly for this project
         if designs_dir.exists():
-            for f in sorted(designs_dir.glob(f"design-photo-*.png"), reverse=True):
+            for f in sorted(designs_dir.glob(f"*{project_id}*photo*.png"), reverse=True):
                 return f
 
-        # 2. Search for sketch Canny edge map
+        # 2. Search for sketch Canny edge map strictly for this sketch or project
         if sketches_dir.exists():
             if sketch_id:
                 canny = sketches_dir / f"{sketch_id}_canny.png"
@@ -92,8 +95,7 @@ class ImageReferenceService:
                 if raw_canny.exists():
                     return raw_canny
 
-            # Default to any project sketch
-            for f in sorted(sketches_dir.glob("*_canny.png"), reverse=True):
+            for f in sorted(sketches_dir.glob(f"*{project_id}*_canny.png"), reverse=True):
                 return f
 
         return None

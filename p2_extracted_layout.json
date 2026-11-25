@@ -1,0 +1,951 @@
+{
+  "schema_version": "1.0",
+  "project_id": "proj-p2-phase6-fidelity",
+  "source_image": "media_1795611575645_1b25a92c.jpg",
+  "layout_type": "detailed_architectural_cad",
+  "room": {
+    "name": "Serverraum (Server Room)",
+    "width_m": 8.267,
+    "length_m": 6.0,
+    "height_m": 3.6,
+    "area_sqm": 49.6
+  },
+  "technical_area": {
+    "present": true,
+    "name": "Technikspange (Technical Utility Plant)",
+    "width_m": 3.2,
+    "length_m": 6.0,
+    "area_sqm": 19.2
+  },
+  "aisles": [
+    {
+      "id": "hot_aisle_01",
+      "type": "hot_aisle_containment",
+      "width_m": 1.5,
+      "orientation": "horizontal",
+      "center_x": 0.0,
+      "center_z": 0.0
+    }
+  ],
+  "components": [
+    {
+      "id": "rack_upper_01",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 1 (42 HE, 1200x800mm)",
+      "row": "Row-A",
+      "x": -2.5,
+      "y": 1.1,
+      "z": -1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 1 - Unit 1 (42 HE, 1200x800mm)",
+      "location": {
+        "x": -2.5,
+        "y": 1.1,
+        "z": -1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_upper_02",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 2 (42 HE, 1200x800mm)",
+      "row": "Row-A",
+      "x": -1.5,
+      "y": 1.1,
+      "z": -1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 1 - Unit 2 (42 HE, 1200x800mm)",
+      "location": {
+        "x": -1.5,
+        "y": 1.1,
+        "z": -1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_upper_03",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 3 (42 HE, 1200x800mm)",
+      "row": "Row-A",
+      "x": -0.5,
+      "y": 1.1,
+      "z": -1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 1 - Unit 3 (42 HE, 1200x800mm)",
+      "location": {
+        "x": -0.5,
+        "y": 1.1,
+        "z": -1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_upper_04",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 4 (42 HE, 1200x800mm)",
+      "row": "Row-A",
+      "x": 0.5,
+      "y": 1.1,
+      "z": -1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 1 - Unit 4 (42 HE, 1200x800mm)",
+      "location": {
+        "x": 0.5,
+        "y": 1.1,
+        "z": -1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_upper_05",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 5 (42 HE, 1200x800mm)",
+      "row": "Row-A",
+      "x": 1.5,
+      "y": 1.1,
+      "z": -1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 1 - Unit 5 (42 HE, 1200x800mm)",
+      "location": {
+        "x": 1.5,
+        "y": 1.1,
+        "z": -1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_upper_06",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 6 (42 HE, 1200x800mm)",
+      "row": "Row-A",
+      "x": 2.5,
+      "y": 1.1,
+      "z": -1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 1 - Unit 6 (42 HE, 1200x800mm)",
+      "location": {
+        "x": 2.5,
+        "y": 1.1,
+        "z": -1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_lower_01",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 1 (42 HE, 1200x800mm)",
+      "row": "Row-B",
+      "x": -2.5,
+      "y": 1.1,
+      "z": 1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 2 - Unit 1 (42 HE, 1200x800mm)",
+      "location": {
+        "x": -2.5,
+        "y": 1.1,
+        "z": 1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_lower_02",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 2 (42 HE, 1200x800mm)",
+      "row": "Row-B",
+      "x": -1.5,
+      "y": 1.1,
+      "z": 1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 2 - Unit 2 (42 HE, 1200x800mm)",
+      "location": {
+        "x": -1.5,
+        "y": 1.1,
+        "z": 1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_lower_03",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 3 (42 HE, 1200x800mm)",
+      "row": "Row-B",
+      "x": -0.5,
+      "y": 1.1,
+      "z": 1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 2 - Unit 3 (42 HE, 1200x800mm)",
+      "location": {
+        "x": -0.5,
+        "y": 1.1,
+        "z": 1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_lower_04",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 4 (42 HE, 1200x800mm)",
+      "row": "Row-B",
+      "x": 0.5,
+      "y": 1.1,
+      "z": 1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 2 - Unit 4 (42 HE, 1200x800mm)",
+      "location": {
+        "x": 0.5,
+        "y": 1.1,
+        "z": 1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_lower_05",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 5 (42 HE, 1200x800mm)",
+      "row": "Row-B",
+      "x": 1.5,
+      "y": 1.1,
+      "z": 1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 2 - Unit 5 (42 HE, 1200x800mm)",
+      "location": {
+        "x": 1.5,
+        "y": 1.1,
+        "z": 1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "rack_lower_06",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 6 (42 HE, 1200x800mm)",
+      "row": "Row-B",
+      "x": 2.5,
+      "y": 1.1,
+      "z": 1.35,
+      "width_m": 0.8,
+      "depth_m": 1.2,
+      "height_m": 2.2,
+      "power_kw": 12.0,
+      "status": "Online",
+      "servers_count": 18,
+      "confidence": 0.99,
+      "source": "detected",
+      "name": "Rack Row 2 - Unit 6 (42 HE, 1200x800mm)",
+      "location": {
+        "x": 2.5,
+        "y": 1.1,
+        "z": 1.35
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 1.2,
+        "height": 2.2
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "ukg_01",
+      "category": "cooling_infrastructure",
+      "type": "cooling_unit",
+      "label": "UKG 1 (Precision Downflow CRAC 15kW)",
+      "x": 4.8,
+      "y": 1.25,
+      "z": -1.8,
+      "width_m": 1.2,
+      "depth_m": 1.0,
+      "height_m": 2.5,
+      "capacity_kw": 15.0,
+      "confidence": 0.98,
+      "source": "detected",
+      "name": "UKG 1 (Precision Downflow CRAC 15kW)",
+      "location": {
+        "x": 4.8,
+        "y": 1.25,
+        "z": -1.8
+      },
+      "dimensions": {
+        "width": 1.2,
+        "depth": 1.0,
+        "height": 2.5
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "ukg_02",
+      "category": "cooling_infrastructure",
+      "type": "cooling_unit",
+      "label": "UKG 2 (Precision Downflow CRAC 15kW)",
+      "x": 4.8,
+      "y": 1.25,
+      "z": 0.0,
+      "width_m": 1.2,
+      "depth_m": 1.0,
+      "height_m": 2.5,
+      "capacity_kw": 15.0,
+      "confidence": 0.98,
+      "source": "detected",
+      "name": "UKG 2 (Precision Downflow CRAC 15kW)",
+      "location": {
+        "x": 4.8,
+        "y": 1.25,
+        "z": 0.0
+      },
+      "dimensions": {
+        "width": 1.2,
+        "depth": 1.0,
+        "height": 2.5
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "ukg_03",
+      "category": "cooling_infrastructure",
+      "type": "cooling_unit",
+      "label": "UKG 3 (Precision Downflow CRAC 15kW)",
+      "x": 4.8,
+      "y": 1.25,
+      "z": 1.8,
+      "width_m": 1.2,
+      "depth_m": 1.0,
+      "height_m": 2.5,
+      "capacity_kw": 15.0,
+      "confidence": 0.98,
+      "source": "detected",
+      "name": "UKG 3 (Precision Downflow CRAC 15kW)",
+      "location": {
+        "x": 4.8,
+        "y": 1.25,
+        "z": 1.8
+      },
+      "dimensions": {
+        "width": 1.2,
+        "depth": 1.0,
+        "height": 2.5
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "usv_power_01",
+      "category": "electrical_infrastructure",
+      "type": "electrical_unit",
+      "label": "Modular USV / UPS 250kVA System",
+      "x": 3.8,
+      "y": 1.0,
+      "z": -2.2,
+      "width_m": 1.0,
+      "depth_m": 0.9,
+      "height_m": 2.0,
+      "rating_kva": 250.0,
+      "confidence": 0.96,
+      "source": "detected",
+      "name": "Modular USV / UPS 250kVA System",
+      "location": {
+        "x": 3.8,
+        "y": 1.0,
+        "z": -2.2
+      },
+      "dimensions": {
+        "width": 1.0,
+        "depth": 0.9,
+        "height": 2.0
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "door_interconnect",
+      "category": "physical_infrastructure",
+      "type": "door",
+      "label": "T30 Fire Protection Security Door",
+      "x": 3.6,
+      "y": 1.05,
+      "z": 0.0,
+      "width_m": 0.1,
+      "depth_m": 1.0,
+      "height_m": 2.1,
+      "confidence": 0.95,
+      "source": "detected",
+      "name": "T30 Fire Protection Security Door",
+      "location": {
+        "x": 3.6,
+        "y": 1.05,
+        "z": 0.0
+      },
+      "dimensions": {
+        "width": 0.1,
+        "depth": 1.0,
+        "height": 2.1
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    },
+    {
+      "id": "partition_gittertrennwand",
+      "category": "physical_infrastructure",
+      "type": "partition",
+      "label": "Gittertrennwand Security Partition Grid",
+      "x": 3.6,
+      "y": 1.5,
+      "z": 0.0,
+      "width_m": 0.1,
+      "depth_m": 6.0,
+      "height_m": 3.0,
+      "confidence": 0.98,
+      "source": "detected",
+      "name": "Gittertrennwand Security Partition Grid",
+      "location": {
+        "x": 3.6,
+        "y": 1.5,
+        "z": 0.0
+      },
+      "dimensions": {
+        "width": 0.1,
+        "depth": 6.0,
+        "height": 3.0
+      },
+      "source_bbox": [
+        10,
+        10,
+        60,
+        60
+      ]
+    }
+  ],
+  "ocr_annotations": [
+    {
+      "text": "A/C",
+      "category": "cooling",
+      "type": "ac_unit",
+      "bbox": [
+        366,
+        0,
+        35,
+        23
+      ],
+      "confidence": 0.97
+    },
+    {
+      "text": "A/C",
+      "category": "cooling",
+      "type": "ac_unit",
+      "bbox": [
+        546,
+        18,
+        23,
+        18
+      ],
+      "confidence": 0.97
+    },
+    {
+      "text": "Network",
+      "category": "network",
+      "type": "network_section",
+      "bbox": [
+        772,
+        48,
+        42,
+        17
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "Network",
+      "category": "network",
+      "type": "network_section",
+      "bbox": [
+        903,
+        50,
+        11,
+        13
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "A/C",
+      "category": "cooling",
+      "type": "ac_unit",
+      "bbox": [
+        661,
+        133,
+        108,
+        38
+      ],
+      "confidence": 0.97
+    },
+    {
+      "text": "UKG 1",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_01",
+      "bbox": [
+        879,
+        228,
+        15,
+        26
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "UKG 1",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_01",
+      "bbox": [
+        919,
+        255,
+        26,
+        27
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "UKG 1",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_01",
+      "bbox": [
+        985,
+        254,
+        6,
+        6
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "UKG 1",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_01",
+      "bbox": [
+        796,
+        270,
+        14,
+        26
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "Serverraum 49,6 m\u00b2",
+      "category": "room_label",
+      "type": "server_room",
+      "value": 49.6,
+      "unit": "m\u00b2",
+      "bbox": [
+        372,
+        318,
+        65,
+        10
+      ],
+      "confidence": 0.99
+    },
+    {
+      "text": "Serverraum 49,6 m\u00b2",
+      "category": "room_label",
+      "type": "server_room",
+      "value": 49.6,
+      "unit": "m\u00b2",
+      "bbox": [
+        559,
+        318,
+        65,
+        42
+      ],
+      "confidence": 0.99
+    },
+    {
+      "text": "UKG 2",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_02",
+      "bbox": [
+        904,
+        411,
+        18,
+        17
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "UKG 2",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_02",
+      "bbox": [
+        782,
+        425,
+        16,
+        18
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "UKG 3",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_03",
+      "bbox": [
+        783,
+        446,
+        42,
+        19
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "UKG 3",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_03",
+      "bbox": [
+        922,
+        480,
+        12,
+        19
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "UKG 3",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_03",
+      "bbox": [
+        923,
+        499,
+        11,
+        15
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "UKG 3",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_03",
+      "bbox": [
+        882,
+        512,
+        12,
+        17
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "4.8 m",
+      "category": "dimension",
+      "type": "room_width",
+      "value": 4.8,
+      "unit": "m",
+      "bbox": [
+        409,
+        582,
+        264,
+        21
+      ],
+      "confidence": 0.99
+    },
+    {
+      "text": "UKG 3",
+      "category": "cooling",
+      "type": "ukg_cooling_unit",
+      "id": "ukg_03",
+      "bbox": [
+        968,
+        608,
+        21,
+        6
+      ],
+      "confidence": 0.98
+    },
+    {
+      "text": "Technikspange",
+      "category": "room_label",
+      "type": "technical_room",
+      "bbox": [
+        839,
+        122,
+        120,
+        30
+      ],
+      "confidence": 0.96
+    },
+    {
+      "text": "42 HE",
+      "category": "specification",
+      "type": "rack_height",
+      "bbox": [
+        327,
+        231,
+        45,
+        20
+      ],
+      "confidence": 0.96,
+      "value": 42
+    },
+    {
+      "text": "1200/800",
+      "category": "specification",
+      "type": "rack_dimension",
+      "bbox": [
+        491,
+        231,
+        60,
+        20
+      ],
+      "confidence": 0.96,
+      "value": "1200/800"
+    }
+  ],
+  "summary": {
+    "total_racks": 12,
+    "rack_rows": 2,
+    "racks_per_row": 6,
+    "cooling_units": 3,
+    "electrical_units": 1,
+    "doors": 1,
+    "hot_aisle_width_m": 1.5
+  },
+  "equipment_summary": {
+    "server_racks": 12,
+    "total_racks": 12,
+    "rack_rows": 2,
+    "racks_per_row": 6,
+    "cooling_units": 3,
+    "electrical_units": 1,
+    "doors": 1,
+    "hot_aisle_width_m": 1.5
+  },
+  "calibration": {
+    "pixels_per_meter": 123.87,
+    "confidence": 0.98,
+    "unit": "meter"
+  }
+}

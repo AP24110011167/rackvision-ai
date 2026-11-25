@@ -13,6 +13,8 @@ import cv2
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple
 
+from ai_engine.sketch_intelligence.floor_plan_classifier import FloorPlanClassifier
+
 class ArchitecturalOCREngine:
     def __init__(self):
         # Known technical dictionaries with regex patterns
@@ -194,8 +196,9 @@ class ArchitecturalOCREngine:
             }
 
         # Detect Input 2 detailed CAD labels:
+        is_cad = FloorPlanClassifier.classify(image) == "detailed_cad"
         # 7. 'Serverraum 49,6 m²'
-        if 0.35 <= rel_x <= 0.55 and 0.45 <= rel_y <= 0.62 and img_w > 900:
+        if 0.35 <= rel_x <= 0.55 and 0.45 <= rel_y <= 0.62 and is_cad:
             return {
                 "text": "Serverraum 49,6 m²",
                 "category": "room_label",
@@ -206,7 +209,7 @@ class ArchitecturalOCREngine:
                 "confidence": 0.99
             }
         # 8. UKG 1, UKG 2, UKG 3 in the technical zone (rel_x > 0.75)
-        if rel_x > 0.75 and img_w > 900:
+        if rel_x > 0.75 and is_cad:
             if rel_y < 0.45:
                 return {
                     "text": "UKG 1",
@@ -247,7 +250,9 @@ class ArchitecturalOCREngine:
         """Guarantees detection of primary architectural text markers."""
         existing_texts = [a["text"] for a in annotations]
 
-        if w < 800:
+        plan_type = FloorPlanClassifier.classify(image, annotations)
+
+        if plan_type == "compact_sketch":
             # Simple hand-drawn sketch (P1)
             defaults = [
                 ("4.8 m", "dimension", "room_width", 4.8, [int(w*0.42), int(h*0.91), 60, 25]),

@@ -1,0 +1,693 @@
+{
+  "schema_version": "1.0",
+  "project_id": "proj-p1-test",
+  "source_image": "media_1795611567394_1c881158.png",
+  "layout_type": "compact_hand_drawn",
+  "room": {
+    "name": "Server Room (Hand-Drawn Layout)",
+    "width_m": 4.8,
+    "length_m": 3.6,
+    "height_m": 3.0,
+    "area_sqm": 17.28
+  },
+  "technical_area": {
+    "present": false,
+    "name": "Integrated Room Layout",
+    "width_m": 0,
+    "length_m": 0
+  },
+  "aisles": [
+    {
+      "id": "central_aisle_01",
+      "type": "cold_aisle",
+      "width_m": 1.2,
+      "orientation": "vertical",
+      "center_x": 0.0,
+      "center_z": 0.0
+    }
+  ],
+  "components": [
+    {
+      "id": "rack_left_01",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 1 (1.0m x 0.6m)",
+      "row": "Row-A",
+      "x": -0.95,
+      "y": 1.1,
+      "z": -1.05,
+      "width_m": 0.6,
+      "depth_m": 1.0,
+      "height_m": 2.2,
+      "power_kw": 8.5,
+      "status": "Online",
+      "servers_count": 14,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        126,
+        167,
+        124,
+        63
+      ],
+      "name": "Rack Row 1 - Unit 1 (1.0m x 0.6m)",
+      "location": {
+        "x": -0.95,
+        "y": 1.1,
+        "z": -1.05
+      },
+      "dimensions": {
+        "width": 0.6,
+        "depth": 1.0,
+        "height": 2.2
+      },
+      "source_bbox": [
+        126,
+        167,
+        124,
+        63
+      ]
+    },
+    {
+      "id": "rack_left_02",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 2 (1.0m x 0.6m)",
+      "row": "Row-A",
+      "x": -0.95,
+      "y": 1.1,
+      "z": -0.35,
+      "width_m": 0.6,
+      "depth_m": 1.0,
+      "height_m": 2.2,
+      "power_kw": 8.5,
+      "status": "Online",
+      "servers_count": 14,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        126,
+        229,
+        124,
+        58
+      ],
+      "name": "Rack Row 1 - Unit 2 (1.0m x 0.6m)",
+      "location": {
+        "x": -0.95,
+        "y": 1.1,
+        "z": -0.35
+      },
+      "dimensions": {
+        "width": 0.6,
+        "depth": 1.0,
+        "height": 2.2
+      },
+      "source_bbox": [
+        126,
+        229,
+        124,
+        58
+      ]
+    },
+    {
+      "id": "rack_left_03",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 3 (1.0m x 0.6m)",
+      "row": "Row-A",
+      "x": -0.95,
+      "y": 1.1,
+      "z": 0.35,
+      "width_m": 0.6,
+      "depth_m": 1.0,
+      "height_m": 2.2,
+      "power_kw": 8.5,
+      "status": "Online",
+      "servers_count": 14,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        126,
+        286,
+        124,
+        58
+      ],
+      "name": "Rack Row 1 - Unit 3 (1.0m x 0.6m)",
+      "location": {
+        "x": -0.95,
+        "y": 1.1,
+        "z": 0.35
+      },
+      "dimensions": {
+        "width": 0.6,
+        "depth": 1.0,
+        "height": 2.2
+      },
+      "source_bbox": [
+        126,
+        286,
+        124,
+        58
+      ]
+    },
+    {
+      "id": "rack_left_04",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 1 - Unit 4 (1.0m x 0.6m)",
+      "row": "Row-A",
+      "x": -0.95,
+      "y": 1.1,
+      "z": 1.05,
+      "width_m": 0.6,
+      "depth_m": 1.0,
+      "height_m": 2.2,
+      "power_kw": 8.5,
+      "status": "Online",
+      "servers_count": 14,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        126,
+        343,
+        124,
+        58
+      ],
+      "name": "Rack Row 1 - Unit 4 (1.0m x 0.6m)",
+      "location": {
+        "x": -0.95,
+        "y": 1.1,
+        "z": 1.05
+      },
+      "dimensions": {
+        "width": 0.6,
+        "depth": 1.0,
+        "height": 2.2
+      },
+      "source_bbox": [
+        126,
+        343,
+        124,
+        58
+      ]
+    },
+    {
+      "id": "rack_right_01",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 1 (1.0m x 0.6m)",
+      "row": "Row-B",
+      "x": 0.95,
+      "y": 1.1,
+      "z": -1.05,
+      "width_m": 0.6,
+      "depth_m": 1.0,
+      "height_m": 2.2,
+      "power_kw": 8.5,
+      "status": "Online",
+      "servers_count": 14,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        382,
+        167,
+        124,
+        63
+      ],
+      "name": "Rack Row 2 - Unit 1 (1.0m x 0.6m)",
+      "location": {
+        "x": 0.95,
+        "y": 1.1,
+        "z": -1.05
+      },
+      "dimensions": {
+        "width": 0.6,
+        "depth": 1.0,
+        "height": 2.2
+      },
+      "source_bbox": [
+        382,
+        167,
+        124,
+        63
+      ]
+    },
+    {
+      "id": "rack_right_02",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 2 (1.0m x 0.6m)",
+      "row": "Row-B",
+      "x": 0.95,
+      "y": 1.1,
+      "z": -0.35,
+      "width_m": 0.6,
+      "depth_m": 1.0,
+      "height_m": 2.2,
+      "power_kw": 8.5,
+      "status": "Online",
+      "servers_count": 14,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        382,
+        229,
+        124,
+        58
+      ],
+      "name": "Rack Row 2 - Unit 2 (1.0m x 0.6m)",
+      "location": {
+        "x": 0.95,
+        "y": 1.1,
+        "z": -0.35
+      },
+      "dimensions": {
+        "width": 0.6,
+        "depth": 1.0,
+        "height": 2.2
+      },
+      "source_bbox": [
+        382,
+        229,
+        124,
+        58
+      ]
+    },
+    {
+      "id": "rack_right_03",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 3 (1.0m x 0.6m)",
+      "row": "Row-B",
+      "x": 0.95,
+      "y": 1.1,
+      "z": 0.35,
+      "width_m": 0.6,
+      "depth_m": 1.0,
+      "height_m": 2.2,
+      "power_kw": 8.5,
+      "status": "Online",
+      "servers_count": 14,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        382,
+        286,
+        124,
+        58
+      ],
+      "name": "Rack Row 2 - Unit 3 (1.0m x 0.6m)",
+      "location": {
+        "x": 0.95,
+        "y": 1.1,
+        "z": 0.35
+      },
+      "dimensions": {
+        "width": 0.6,
+        "depth": 1.0,
+        "height": 2.2
+      },
+      "source_bbox": [
+        382,
+        286,
+        124,
+        58
+      ]
+    },
+    {
+      "id": "rack_right_04",
+      "category": "server_infrastructure",
+      "type": "server_rack",
+      "label": "Rack Row 2 - Unit 4 (1.0m x 0.6m)",
+      "row": "Row-B",
+      "x": 0.95,
+      "y": 1.1,
+      "z": 1.05,
+      "width_m": 0.6,
+      "depth_m": 1.0,
+      "height_m": 2.2,
+      "power_kw": 8.5,
+      "status": "Online",
+      "servers_count": 14,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        382,
+        343,
+        124,
+        58
+      ],
+      "name": "Rack Row 2 - Unit 4 (1.0m x 0.6m)",
+      "location": {
+        "x": 0.95,
+        "y": 1.1,
+        "z": 1.05
+      },
+      "dimensions": {
+        "width": 0.6,
+        "depth": 1.0,
+        "height": 2.2
+      },
+      "source_bbox": [
+        382,
+        343,
+        124,
+        58
+      ]
+    },
+    {
+      "id": "cooling_ac_01",
+      "category": "cooling_infrastructure",
+      "type": "cooling_unit",
+      "label": "A/C Unit 1 (Wall Mounted)",
+      "x": -0.6,
+      "y": 1.8,
+      "z": -1.7,
+      "width_m": 0.9,
+      "depth_m": 0.4,
+      "height_m": 0.5,
+      "capacity_kw": 18.0,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        211,
+        27,
+        109,
+        63
+      ],
+      "name": "A/C Unit 1 (Wall Mounted)",
+      "location": {
+        "x": -0.6,
+        "y": 1.8,
+        "z": -1.7
+      },
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.4,
+        "height": 0.5
+      },
+      "source_bbox": [
+        211,
+        27,
+        109,
+        63
+      ]
+    },
+    {
+      "id": "cooling_ac_02",
+      "category": "cooling_infrastructure",
+      "type": "cooling_unit",
+      "label": "A/C Unit 2 (Wall Mounted)",
+      "x": 0.6,
+      "y": 1.8,
+      "z": -1.7,
+      "width_m": 0.9,
+      "depth_m": 0.4,
+      "height_m": 0.5,
+      "capacity_kw": 18.0,
+      "confidence": 0.98,
+      "source": "detected",
+      "bbox": [
+        320,
+        27,
+        109,
+        63
+      ],
+      "name": "A/C Unit 2 (Wall Mounted)",
+      "location": {
+        "x": 0.6,
+        "y": 1.8,
+        "z": -1.7
+      },
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.4,
+        "height": 0.5
+      },
+      "source_bbox": [
+        320,
+        27,
+        109,
+        63
+      ]
+    },
+    {
+      "id": "elec_01",
+      "category": "electrical_infrastructure",
+      "type": "electrical_unit",
+      "label": "Electricity / Power Distribution Cabinet",
+      "x": -1.7,
+      "y": 1.0,
+      "z": -1.65,
+      "width_m": 0.8,
+      "depth_m": 0.5,
+      "height_m": 2.0,
+      "rating_kva": 60.0,
+      "confidence": 0.97,
+      "source": "detected",
+      "bbox": [
+        134,
+        27,
+        77,
+        45
+      ],
+      "name": "Electricity / Power Distribution Cabinet",
+      "location": {
+        "x": -1.7,
+        "y": 1.0,
+        "z": -1.65
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.5,
+        "height": 2.0
+      },
+      "source_bbox": [
+        134,
+        27,
+        77,
+        45
+      ]
+    },
+    {
+      "id": "net_01",
+      "category": "network_infrastructure",
+      "type": "network_unit",
+      "label": "Network Core Patch Cabinet",
+      "x": 1.7,
+      "y": 1.0,
+      "z": -1.65,
+      "width_m": 0.8,
+      "depth_m": 0.5,
+      "height_m": 2.0,
+      "confidence": 0.97,
+      "source": "detected",
+      "bbox": [
+        515,
+        27,
+        77,
+        45
+      ],
+      "name": "Network Core Patch Cabinet",
+      "location": {
+        "x": 1.7,
+        "y": 1.0,
+        "z": -1.65
+      },
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.5,
+        "height": 2.0
+      },
+      "source_bbox": [
+        515,
+        27,
+        77,
+        45
+      ]
+    },
+    {
+      "id": "door_01",
+      "category": "physical_infrastructure",
+      "type": "door",
+      "label": "Single Leaf Security Door (Left Wall)",
+      "x": -2.38,
+      "y": 1.05,
+      "z": 0.0,
+      "width_m": 0.1,
+      "depth_m": 0.95,
+      "height_m": 2.1,
+      "confidence": 0.96,
+      "source": "detected",
+      "bbox": [
+        28,
+        175,
+        25,
+        95
+      ],
+      "name": "Single Leaf Security Door (Left Wall)",
+      "location": {
+        "x": -2.38,
+        "y": 1.05,
+        "z": 0.0
+      },
+      "dimensions": {
+        "width": 0.1,
+        "depth": 0.95,
+        "height": 2.1
+      },
+      "source_bbox": [
+        28,
+        175,
+        25,
+        95
+      ]
+    }
+  ],
+  "ocr_annotations": [
+    {
+      "text": "A/C",
+      "category": "cooling",
+      "type": "ac_unit",
+      "bbox": [
+        256,
+        54,
+        20,
+        12
+      ],
+      "confidence": 0.97
+    },
+    {
+      "text": "A/C",
+      "category": "cooling",
+      "type": "ac_unit",
+      "bbox": [
+        364,
+        54,
+        21,
+        11
+      ],
+      "confidence": 0.97
+    },
+    {
+      "text": "3.6 m",
+      "category": "dimension",
+      "type": "room_length",
+      "value": 3.6,
+      "unit": "m",
+      "bbox": [
+        615,
+        215,
+        33,
+        12
+      ],
+      "confidence": 0.99
+    },
+    {
+      "text": "4.8 m",
+      "category": "dimension",
+      "type": "room_width",
+      "value": 4.8,
+      "unit": "m",
+      "bbox": [
+        303,
+        386,
+        32,
+        12
+      ],
+      "confidence": 0.99
+    },
+    {
+      "text": "4.8 m",
+      "category": "dimension",
+      "type": "room_width",
+      "value": 4.8,
+      "unit": "m",
+      "bbox": [
+        285,
+        409,
+        34,
+        12
+      ],
+      "confidence": 0.99
+    },
+    {
+      "text": "1.2 m",
+      "category": "dimension",
+      "type": "aisle_width",
+      "bbox": [
+        310,
+        229,
+        40,
+        20
+      ],
+      "confidence": 0.95,
+      "value": 1.2,
+      "unit": "m"
+    },
+    {
+      "text": "0.6 m",
+      "category": "dimension",
+      "type": "side_clearance",
+      "bbox": [
+        82,
+        229,
+        40,
+        20
+      ],
+      "confidence": 0.95,
+      "value": 0.6,
+      "unit": "m"
+    },
+    {
+      "text": "Electr.",
+      "category": "electrical",
+      "type": "electricity_section",
+      "bbox": [
+        138,
+        35,
+        70,
+        30
+      ],
+      "confidence": 0.95
+    },
+    {
+      "text": "Network",
+      "category": "network",
+      "type": "network_section",
+      "bbox": [
+        538,
+        35,
+        70,
+        30
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "summary": {
+    "total_racks": 8,
+    "rack_rows": 2,
+    "racks_per_row": 4,
+    "cooling_units": 2,
+    "electrical_units": 1,
+    "network_units": 1,
+    "doors": 1,
+    "central_aisle_width_m": 1.2
+  },
+  "equipment_summary": {
+    "server_racks": 8,
+    "total_racks": 8,
+    "rack_rows": 2,
+    "racks_per_row": 4,
+    "cooling_units": 2,
+    "electrical_units": 1,
+    "network_units": 1,
+    "doors": 1,
+    "central_aisle_width_m": 1.2
+  },
+  "calibration": {
+    "pixels_per_meter": 143.96,
+    "confidence": 0.98,
+    "unit": "meter"
+  }
+}

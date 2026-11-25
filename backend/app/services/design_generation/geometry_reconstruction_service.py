@@ -129,6 +129,71 @@ class GeometryReconstructionService:
     """
 
     @staticmethod
+    def build_scene_graph(layout: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Builds a fresh, deterministic, immutable 3D scene graph strictly from layout JSON.
+        Guarantees complete isolation between projects with no shared global state.
+        """
+        if not layout:
+            return {"type": "empty_scene", "objects": []}
+
+        room = layout.get("room", {})
+        rw = float(room.get("width_m", 4.8))
+        rl = float(room.get("length_m", 3.6))
+        rh = float(room.get("height_m", 3.0))
+        area = float(room.get("area_sqm", rw * rl))
+
+        components = layout.get("components", [])
+        racks = [c for c in components if c.get("category") == "server_infrastructure"]
+        cooling = [c for c in components if c.get("category") == "cooling_infrastructure"]
+        elec = [c for c in components if c.get("category") == "electrical_infrastructure"]
+        net = [c for c in components if c.get("category") == "network_infrastructure"]
+        doors = [c for c in components if c.get("category") == "physical_infrastructure" and "door" in c.get("type", "")]
+
+        info = GeometryReconstructionService.detect_layout_orientation(layout)
+        has_partition = info.get("has_technical_spange", False)
+        has_containment = info.get("has_hot_aisle", False)
+
+        scene = {
+            "room": {"width_m": rw, "length_m": rl, "height_m": rh, "area_sqm": area},
+            "orientation": info.get("row_axis", "Z"),
+            "rack_count": len(racks),
+            "racks": [
+                {
+                    "id": r.get("id"), "row": r.get("row"),
+                    "x": float(r.get("x", 0.0)), "y": float(r.get("y", 1.0)), "z": float(r.get("z", 0.0)),
+                    "w": float(r.get("width_m", 1.0)), "d": float(r.get("depth_m", 0.6)), "h": float(r.get("height_m", 2.0))
+                }
+                for r in racks
+            ],
+            "cooling_count": len(cooling),
+            "cooling_units": [
+                {
+                    "id": u.get("id"), "type": u.get("type"), "label": u.get("label"),
+                    "x": float(u.get("x", 0.0)), "y": float(u.get("y", 1.0)), "z": float(u.get("z", 0.0)),
+                    "w": float(u.get("width_m", 0.9)), "d": float(u.get("depth_m", 0.4)), "h": float(u.get("height_m", 0.5)),
+                    "capacity_kw": float(u.get("capacity_kw", 15.0))
+                }
+                for u in cooling
+            ],
+            "containment": {"present": has_containment, "type": "warm_aisle" if has_containment else "none"},
+            "partition": {"present": has_partition, "x": 3.6 if has_partition else None, "type": "gittertrennwand" if has_partition else "none"},
+            "doors": [{"id": d.get("id"), "x": float(d.get("x", 0.0)), "z": float(d.get("z", 0.0))} for d in doors],
+            "electrical_units": len(elec),
+            "network_units": len(net)
+        }
+        return scene
+
+    @staticmethod
+    def compute_scene_signature(layout: Optional[Dict[str, Any]]) -> str:
+        """Computes a cryptographic SHA-256 signature of the deterministic 3D scene."""
+        import hashlib
+        import json
+        scene = GeometryReconstructionService.build_scene_graph(layout)
+        canon = json.dumps(scene, sort_keys=True, separators=(',', ':'))
+        return hashlib.sha256(canon.encode("utf-8")).hexdigest()
+
+    @staticmethod
     def detect_layout_orientation(layout: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Determines the spatial arrangement and alignment axes from layout components.
@@ -206,54 +271,70 @@ class GeometryReconstructionService:
         room_w, room_l, room_h = info["room_dims"]
         is_p2 = info["is_p2"]
 
+        # Viewpoint normalization
+        vp = camera_viewpoint.lower()
+        if vp in ["elevated_overview", "wide_angle_architecture", "overview"]:
+            view_mode = "wide_angle_architecture"
+        elif vp in ["isometric_axonometric", "elevated_view", "axonometric"]:
+            view_mode = "isometric_axonometric"
+        elif vp in ["cooling_infrastructure", "technical_area_view", "technical_area", "cooling"]:
+            view_mode = "cooling_infrastructure"
+        elif vp in ["server_rack_closeup", "rack_closeup", "closeup"]:
+            view_mode = "server_rack_closeup"
+        elif vp in ["server_room_view", "server_room", "cinematic_central_aisle", "master_render"]:
+            view_mode = "cinematic_central_aisle"
+        else:
+            view_mode = camera_viewpoint
+
         if is_p2 or info["has_technical_spange"]:
             # P2 / Asymmetric layout: 12 Racks in two rows of 6 along X (-2.5 to +2.5m), Z = -1.35 and +1.35m.
             # Central hot aisle at Z = 0m (1.5m wide). Technikspange at X >= 3.6m on right with 3 UKGs at X=4.8m.
             # Geometry-aware perspective: Elevated three-quarter architectural perspective capturing both rack rows,
             # hot-aisle containment, right-side technical utility room with all 3 UKG cooling units, and interconnecting T30 door.
-            if camera_viewpoint == "wide_angle_architecture":
+            if view_mode == "wide_angle_architecture":
                 # View A: Elevated Three-Quarter Overview capturing both rack rows, containment, partition, and 3 UKG units
-                cam_pos = (-4.5, 3.2, 4.2)
-                cam_target = (1.5, 1.0, -0.3)
+                cam_pos = (-0.8, 4.4, 5.2)
+                cam_target = (1.8, 1.0, -0.4)
                 fov = 82.0
-            elif camera_viewpoint == "isometric_axonometric":
+            elif view_mode == "isometric_axonometric":
                 # Elevated 35-degree axonometric view showing dual-row containment and cooling units
-                cam_pos = (-5.5, 4.8, 4.8)
-                cam_target = (1.2, 0.8, -0.2)
-                fov = 55.0
-            elif camera_viewpoint == "cooling_infrastructure":
+                cam_pos = (-1.0, 4.6, 5.0)
+                cam_target = (1.8, 1.0, -0.3)
+                fov = 76.0
+            elif view_mode == "cooling_infrastructure":
                 # View C: Technical-Area Perspective focused on the 3 UKG downflow units along X=4.8m and T30 door
-                cam_pos = (2.2, 1.8, 3.4)
-                cam_target = (4.8, 1.3, -0.4)
+                cam_pos = (2.2, 2.0, 3.2)
+                cam_target = (4.8, 1.3, -0.2)
                 fov = 74.0
-            elif camera_viewpoint == "server_rack_closeup":
+            elif view_mode == "server_rack_closeup":
                 # Close-up of 42U rack faceplates and blade bays
                 cam_pos = (-1.8, 1.4, 0.4)
                 cam_target = (-1.5, 1.2, -1.35)
                 fov = 36.0
             else:
                 # View B: Server-Room Architectural Perspective (cinematic_central_aisle)
-                # Angled perspective inside server room showing dual rows & containment without generic corridor symmetry
-                cam_pos = (-3.8, 1.8, 2.4)
-                cam_target = (2.2, 1.2, -0.5)
-                fov = 76.0
+                # Angled perspective inside server room showing all 12 racks & containment without generic corridor symmetry
+                cam_pos = (-4.0, 2.3, 2.5)
+                cam_target = (1.5, 1.1, -0.3)
+                fov = 82.0
         else:
             # P1 / Vertical layouts: 8 racks in 2 rows of 4 along Z (-1.05 to +1.05m), X = -0.95 and +0.95m.
             # Central cold aisle along Z at X = 0m.
-            if camera_viewpoint == "wide_angle_architecture":
-                cam_pos = (2.8, 3.0, 2.8)
-                cam_target = (0.0, 1.2, -0.4)
-                fov = 84.0
-            elif camera_viewpoint == "isometric_axonometric":
-                cam_pos = (3.6, 4.5, 3.4)
-                cam_target = (0.0, 1.0, -0.2)
-                fov = 55.0
-            elif camera_viewpoint == "cooling_infrastructure":
-                # Perimeter wall AC units at Z = -1.7m
-                cam_pos = (0.0, 1.5, 1.0)
-                cam_target = (0.0, 1.8, -1.7)
-                fov = 68.0
-            elif camera_viewpoint == "server_rack_closeup":
+            if view_mode == "wide_angle_architecture":
+                # Elevated Three-Quarter Overview capturing compact 8-rack room, aisle, A/Cs, and door
+                cam_pos = (0.0, 3.2, 3.4)
+                cam_target = (0.0, 1.0, -0.6)
+                fov = 80.0
+            elif view_mode == "isometric_axonometric":
+                cam_pos = (0.0, 3.2, 3.4)
+                cam_target = (0.0, 1.0, -0.6)
+                fov = 80.0
+            elif view_mode == "cooling_infrastructure":
+                # Perimeter wall AC units at Z = -1.7m with room in view
+                cam_pos = (0.0, 1.8, 2.2)
+                cam_target = (0.0, 1.6, -1.7)
+                fov = 76.0
+            elif view_mode == "server_rack_closeup":
                 cam_pos = (-0.3, 1.4, -0.35)
                 cam_target = (-0.95, 1.3, -0.35)
                 fov = 35.0

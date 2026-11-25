@@ -307,7 +307,7 @@ async def upload_sketch(project_id: str = Query(...), file: UploadFile = File(..
         pre_url = intel_result["preprocessed_url"]
         canny_url = intel_result["canny_url"]
         binary_url = intel_result["binary_url"]
-        annotated_overlay_url = intel_result["annotated_overlay_url"]
+        annotated_overlay_url = intel_result.get("annotated_overlay_url") or intel_result.get("annotated_url") or pre_url
     except Exception as e:
         logger.error("Sketch intelligence analysis failed on upload: %s", str(e), exc_info=True)
         # Fallback to standard preprocessor
@@ -336,6 +336,9 @@ async def upload_sketch(project_id: str = Query(...), file: UploadFile = File(..
     conn = get_connection()
     cursor = conn.cursor()
     now = datetime.now().isoformat()
+    # Invalidate stale designs for this project so old renders are never reused
+    cursor.execute("DELETE FROM designs WHERE project_id = ?", (project_id,))
+    cursor.execute("DELETE FROM final_master_renders WHERE project_id = ?", (project_id,))
     cursor.execute("""
     INSERT INTO sketches (id, project_id, filename, original_url, preprocessed_url, canny_url, params_json, created_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -637,28 +640,37 @@ def get_project_design_outputs(project_id: str):
     photorealistic = next((d for d in designs_list if d.get("output_type") == "photorealistic"), None)
     master_render = next((d for d in designs_list if d.get("output_type") == "master_render"), None)
 
-    # If outputs don't exist, generate initial trio
+    # If outputs don't exist, generate initial trio strictly conditioned on the project layout
     if not technical and not photorealistic and not master_render:
         active_sketch = SketchService.get_or_create_sketch(project_id)
+        cur_layout = LayoutService.get_layout(project_id)
+        rack_cnt = 12
+        if cur_layout:
+            racks_in_layout = [c for c in cur_layout.get("components", []) if c.get("category") == "server_infrastructure"]
+            if racks_in_layout:
+                rack_cnt = len(racks_in_layout)
+        cam_vp = "cinematic_central_aisle" if rack_cnt <= 8 else "wide_angle_architecture"
+        cur_style = "Compact Cleanroom Data Center" if rack_cnt <= 8 else "Modern Enterprise Data Center"
+
         technical_batch = AIGenerationService.generate_design(
             project_id=project_id,
             sketch_id=active_sketch["id"],
-            style="Modern Enterprise Data Center",
-            rack_count=12,
+            style=cur_style,
+            rack_count=rack_cnt,
             num_variations=1
         )
         photo_batch = PhotorealisticService.generate_photorealistic_visualization(
             project_id=project_id,
             sketch_id=active_sketch["id"],
-            style="Modern Enterprise Data Center",
+            style=cur_style,
             camera_viewpoint="front_symmetrical",
             num_variations=1
         )
         master_batch = FinalArchitecturalRenderService.generate_final_master_render(
             project_id=project_id,
             sketch_id=active_sketch["id"],
-            style="Modern Enterprise Data Center",
-            camera_viewpoint="cinematic_central_aisle",
+            style=cur_style,
+            camera_viewpoint=cam_vp,
             resolution="1920x1080",
             enable_upscaling=True
         )

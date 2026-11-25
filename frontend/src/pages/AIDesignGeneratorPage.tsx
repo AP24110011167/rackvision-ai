@@ -40,24 +40,21 @@ const MASTER_CAMERA_VIEWPOINTS = [
   { id: 'cooling_infrastructure', label: 'View C: Technical Area Cooling', desc: 'Focused 74° perspective on 3 UKG precision cooling units and T30 fire protection door' },
 ];
 
-const VIEWPOINT_DELIVERABLES: Record<string, { url: string; label: string; desc: string; specs: string }> = {
+const VIEWPOINT_DELIVERABLES: Record<string, { label: string; desc: string; specs: string }> = {
   wide_angle_architecture: {
-    url: '/images/p2_view_a_elevated_overview_master.png',
     label: 'View A: Elevated Three-Quarter Overview',
-    desc: 'High vantage perspective capturing 49.6 m² white space, Technikspange partition, and containment plenum.',
-    specs: '16mm Equiv • 82° FOV • 1920×1080 PBR + SDXL'
+    desc: 'High vantage perspective capturing full facility white space, infrastructure, and containment plenum.',
+    specs: '16mm Equiv • 82° FOV • 1920×1080 PBR'
   },
   cinematic_central_aisle: {
-    url: '/images/p2_view_b_server_room_master.png',
-    label: 'View B: Server-Room Architectural Perspective',
-    desc: 'Eye-level cold-aisle perspective along two rows of 6 enterprise 42U cabinets with perforated mesh doors.',
-    specs: '35mm Equiv • 76° FOV • 1920×1080 PBR + SDXL'
+    label: 'View B: Central Aisle Perspective',
+    desc: 'Eye-level cold/hot aisle perspective along server cabinets with true ventilation doors.',
+    specs: '35mm Equiv • 76° FOV • 1920×1080 PBR'
   },
   cooling_infrastructure: {
-    url: '/images/p2_view_c_technical_area_master.png',
-    label: 'View C: Technical-Area Cooling Perspective',
-    desc: 'Dedicated plant showing three 15 kW UKG precision downflow cooling units and interconnecting T30 fire door.',
-    specs: '28mm Equiv • 74° FOV • 1920×1080 PBR + SDXL'
+    label: 'View C: Cooling Infrastructure Perspective',
+    desc: 'Dedicated plant perspective showing precision downflow cooling units, duct plenums, and safety infrastructure.',
+    specs: '28mm Equiv • 74° FOV • 1920×1080 PBR'
   }
 };
 
@@ -109,99 +106,70 @@ export const AIDesignGeneratorPage: React.FC<AIDesignGeneratorPageProps> = ({
   const [modalImage, setModalImage] = useState<{ url: string; title: string } | null>(null);
   const [isPresentationOpen, setIsPresentationOpen] = useState(false);
 
-  // Load outputs on project change
+  // Load outputs on project change or sketch update
   useEffect(() => {
     loadOutputs();
-  }, [activeProjectId]);
+  }, [activeProjectId, sketch?.id, sketch?.original_url]);
 
   const loadOutputs = async () => {
     setIsLoadingOutputs(true);
     try {
       const res = await api.getProjectDesignOutputs(activeProjectId);
       if (res.technical) setTechnicalDesign(res.technical);
+      else setTechnicalDesign(null);
+
       if (res.photorealistic) setPhotoDesign(res.photorealistic);
-      if (res.master_render) {
-        const isStandbyWireframe =
-          res.master_render.mode === 'sdxl_controlnet_conditioning' ||
-          res.master_render.mode === 'diagnostic_wireframe_preview' ||
-          res.master_render.generation_status !== 'completed' ||
-          (res.master_render.model_name && (res.master_render.model_name.includes('Standby') || res.master_render.model_name.includes('Wireframe')));
-        if (!isStandbyWireframe) {
-          setMasterDesign(res.master_render);
-        } else {
-          setFallbackMaster();
-        }
+      else setPhotoDesign(null);
+
+      if (res.master_render && res.master_render.generation_status === 'completed') {
+        setMasterDesign(res.master_render);
       } else {
-        setFallbackMaster();
+        setMasterDesign(null);
       }
     } catch (err) {
       console.warn('Failed to load dual/triple outputs:', err);
-      const tech = designs.find((d) => d.output_type === 'technical') || designs[0] || null;
+      const tech = designs.find((d) => d.output_type === 'technical') || null;
       const photo = designs.find((d) => d.output_type === 'photorealistic') || null;
-      const master =
-        designs.find(
-          (d) =>
-            d.output_type === 'master_render' &&
-            d.generation_status === 'completed' &&
-            d.mode === 'colab_sdxl_controlnet' &&
-            !(d.model_name && (d.model_name.includes('Standby') || d.model_name.includes('Wireframe')))
-        ) || null;
-      if (tech) setTechnicalDesign(tech);
-      if (photo) setPhotoDesign(photo);
-      if (master) setMasterDesign(master);
-      else setFallbackMaster();
+      const master = designs.find((d) => d.output_type === 'master_render' && d.generation_status === 'completed') || null;
+      setTechnicalDesign(tech);
+      setPhotoDesign(photo);
+      setMasterDesign(master);
     } finally {
       setIsLoadingOutputs(false);
     }
   };
 
   const setFallbackMaster = () => {
-    setMasterDesign({
-      id: 'master-p2-ground-truth',
-      project_id: activeProjectId,
-      image_url: VIEWPOINT_DELIVERABLES[selectedMasterView]?.url || '/images/p2_output3_master_render.png',
-      output_type: 'master_render',
-      style: 'Modern Enterprise Data Center',
-      camera_viewpoint: selectedMasterView,
-      viewpoint_label: VIEWPOINT_DELIVERABLES[selectedMasterView]?.label || 'View A: Elevated Overview',
-      resolution: '1920x1080',
-      mode: 'hybrid_pbr_sdxl_controlnet',
-      model_name: 'RackVision Hybrid Photographic Engine (PBR + SDXL Enhanced)',
-      generation_status: 'completed',
-      rack_count: 12,
-      cooling_type: '3 UKG Precision Units (15 kW)',
-      prompt: 'High-end architectural enterprise data center with dual 6-rack rows and precision cooling',
-      negative_prompt: 'blurry, low quality, cartoon, distorted',
-      seed: 42,
-      guidance_scale: 7.5,
-      steps: 30,
-      created_at: new Date().toISOString()
-    });
+    setMasterDesign(null);
   };
 
-  // Switch viewpoint
-  const handleSelectViewpoint = (vpKey: string) => {
+  // Switch viewpoint dynamically generating the render for the active layout
+  const handleSelectViewpoint = async (vpKey: string) => {
     setSelectedMasterView(vpKey);
     setMasterViewpoint(vpKey);
-    const viewMeta = VIEWPOINT_DELIVERABLES[vpKey];
-    if (viewMeta) {
-      setMasterDesign((prev) => ({
-        ...(prev || ({} as any)),
-        id: `master-${vpKey}`,
+    setIsGeneratingMaster(true);
+    setMasterProgressStep(`Generating 1080p architectural render for ${vpKey}...`);
+    try {
+      const res = await api.generateFinalMasterRender({
         project_id: activeProjectId,
-        image_url: viewMeta.url,
-        output_type: 'master_render',
+        sketch_id: sketch?.id,
         style: archStyle,
         camera_viewpoint: vpKey,
-        viewpoint_label: viewMeta.label,
+        lighting: lightingCondition,
         resolution: '1920x1080',
-        mode: 'hybrid_pbr_sdxl_controlnet',
-        model_name: 'RackVision Hybrid Photographic Engine (PBR + SDXL Enhanced)',
-        generation_status: 'completed',
-        rack_count: 12,
-        cooling_type: '3 UKG Precision Units (15 kW)',
-        created_at: new Date().toISOString()
-      }));
+        model_provider: modelProvider,
+        enable_upscaling: enableUpscaling,
+        seed,
+        use_style_reference: true,
+      });
+      if (res && res.length > 0) {
+        setMasterDesign(res[0]);
+      }
+    } catch (err: any) {
+      console.warn('Viewpoint render failed:', err);
+      setMasterError(err.message || 'Failed to generate viewpoint render');
+    } finally {
+      setIsGeneratingMaster(false);
     }
   };
 
@@ -718,7 +686,7 @@ export const AIDesignGeneratorPage: React.FC<AIDesignGeneratorPageProps> = ({
                   <button
                     onClick={() =>
                       setModalImage({
-                        url: '/images/p2_view_a_comparison.png',
+                        url: masterDesign?.comparison_url || masterDesign?.image_url || '/images/p2_view_a_comparison.png',
                         title: 'Output 3: Three-Stage Quantitative Comparison Canvas',
                       })
                     }
@@ -763,7 +731,7 @@ export const AIDesignGeneratorPage: React.FC<AIDesignGeneratorPageProps> = ({
                         alt="Final Architectural Master Render"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.01]"
                         onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = '/images/p2_output3_master_render.png';
+                          e.currentTarget.style.opacity = '0.5';
                         }}
                       />
                       <div className="absolute inset-0 bg-[#07090D]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
@@ -890,10 +858,10 @@ export const AIDesignGeneratorPage: React.FC<AIDesignGeneratorPageProps> = ({
           {viewMode === 'slider' && (
             <div className="space-y-4">
               <BeforeAfterSlider
-                beforeImage={technicalDesign?.image_url || '/images/p2_perspective_conditioning_canny.png'}
-                afterImage={masterDesign?.image_url || '/images/p2_output3_master_render.png'}
-                beforeLabel="Input: 3D CAD Perspective Canny Map (768×768)"
-                afterLabel={`Output 3: Master Render (${masterDesign?.viewpoint_label || '1080p Master'})`}
+                beforeImage={technicalDesign?.image_url || sketch?.canny_url || masterDesign?.canny_url || ''}
+                afterImage={masterDesign?.image_url || ''}
+                beforeLabel="Input: Perspective Conditioning Canny Map"
+                afterLabel={`Output 3: Master Render (${masterDesign?.viewpoint_label || 'Master'})`}
               />
             </div>
           )}
@@ -931,7 +899,7 @@ export const AIDesignGeneratorPage: React.FC<AIDesignGeneratorPageProps> = ({
                           alt="Technical Layout"
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).src = '/images/p2_perspective_conditioning_canny.png';
+                            e.currentTarget.style.opacity = '0.5';
                           }}
                         />
                         <div className="absolute inset-0 bg-[#07090D]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
@@ -1043,7 +1011,7 @@ export const AIDesignGeneratorPage: React.FC<AIDesignGeneratorPageProps> = ({
                           alt="Photorealistic Preview"
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).src = '/images/p2_view_b_server_room_master.png';
+                            e.currentTarget.style.opacity = '0.5';
                           }}
                         />
                         <div className="absolute inset-0 bg-[#07090D]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">

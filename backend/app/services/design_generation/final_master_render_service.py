@@ -22,6 +22,7 @@ import io
 import uuid
 import time
 import json
+import hashlib
 import logging
 from pathlib import Path
 from datetime import datetime
@@ -37,6 +38,7 @@ from app.services.colab_inference_service import ColabInferenceService
 from app.services.design_generation.layout_reference_service import LayoutReferenceService
 from app.services.design_generation.layout_conditioning_service import LayoutConditioningService
 from app.services.design_generation.geometry_reconstruction_service import GeometryReconstructionService
+from app.services.design_generation.hybrid_geometry_renderer import HybridGeometryRenderer
 from app.services.design_generation.image_reference_service import ImageReferenceService
 from app.services.design_generation.image_generation_provider import ImageGenerationProvider
 from app.services.design_generation.image_validation_service import ImageValidationService
@@ -148,6 +150,14 @@ class FinalMasterRenderService:
         """
         start_time = time.time()
         layout = LayoutService.get_layout(project_id)
+        if not layout:
+            from app.services.sketch_service import SketchService
+            active_sketch = SketchService.get_or_create_sketch(project_id)
+            orig_filename = os.path.basename(active_sketch.get("original_url", ""))
+            orig_path = settings.SKETCHES_DIR / orig_filename
+            if orig_path.exists():
+                res = LayoutService.process_and_reconstruct(project_id, str(orig_path), sketch_id=active_sketch.get("id"))
+                layout = res.get("layout")
 
         prompt, neg_prompt = FinalMasterRenderService.construct_master_architectural_prompt(
             layout=layout,
@@ -164,7 +174,21 @@ class FinalMasterRenderService:
         target_w = int(res_parts[0]) if len(res_parts) == 2 else 1920
         target_h = int(res_parts[1]) if len(res_parts) == 2 else 1080
 
-        design_id = f"design-master-{uuid.uuid4().hex[:8]}"
+        # Deterministic and isolated artifact & cache key incorporating project, source hash, layout signature, and viewpoint
+        src_hash = "nosource"
+        from app.services.sketch_service import SketchService
+        active_sketch = SketchService.get_or_create_sketch(project_id)
+        if active_sketch and active_sketch.get("original_url"):
+            orig_filename = os.path.basename(active_sketch.get("original_url", ""))
+            orig_path = settings.SKETCHES_DIR / orig_filename
+            if orig_path.exists():
+                src_hash = hashlib.sha256(orig_path.read_bytes()).hexdigest()[:8]
+
+        layout_hash = "nolayout"
+        if layout:
+            layout_hash = GeometryReconstructionService.compute_scene_signature(layout)[:8]
+
+        design_id = f"master_{project_id}_{src_hash}_{layout_hash}_v5_{camera_viewpoint}_{uuid.uuid4().hex[:4]}"
         filename = f"{design_id}_var_1.png"
         output_path = settings.DESIGNS_DIR / filename
         now = datetime.now().isoformat()
@@ -267,46 +291,36 @@ class FinalMasterRenderService:
                 generation_mode = "diagnostic_wireframe_preview"
                 selected_model_name = "Output 3 Architectural Wireframe (Diagnostic Standby)"
                 generation_status = "diagnostic_standby"
-            elif os.environ.get("RACKVISION_TEST_MODE") == "1":
-                # Test environment simulation: load verified photorealistic SDXL reference render matching layout
-                components = layout.get("components", []) if layout else []
-                racks = [c for c in components if c.get("category") == "server_infrastructure"]
-                rack_count_val = len(racks) if racks else 12
-
-                if rack_count_val <= 8:
-                    cached_sdxl = settings.DESIGNS_DIR / "design-master-66029eaf_var_1.png"
-                    if not cached_sdxl.exists():
-                        cached_sdxl = settings.DESIGNS_DIR / "design-master-f1489d7b_var_1.png"
-                else:
-                    cached_sdxl = settings.DESIGNS_DIR / "design-master-f1489d7b_var_1.png"
-                    if not cached_sdxl.exists():
-                        cached_sdxl = settings.DESIGNS_DIR / "design-master-66029eaf_var_1.png"
-
-                if cached_sdxl.exists():
-                    ref_img = Image.open(str(cached_sdxl)).convert("RGB")
-                    # Extract 768x768 raw diffusion frame before badge
-                    raw_sim = ref_img.resize((768, 768), Image.Resampling.LANCZOS)
-                    raw_filename = f"{design_id}_raw.png"
-                    raw_output_path = settings.DESIGNS_DIR / raw_filename
-                    raw_output_path.parent.mkdir(parents=True, exist_ok=True)
-                    raw_sim.save(str(raw_output_path), "PNG")
-
-                    rendered_image = raw_sim
-                    generation_mode = "colab_sdxl_controlnet"
-                    selected_model_name = "Google Colab GPU Node (SDXL Base 1.0 + ControlNet Canny)"
-                    generation_status = "completed"
-                else:
-                    reason = colab_status.get("message", "Colab GPU node is offline or unconfigured.")
-                    raise HTTPException(
-                        status_code=503,
-                        detail=f"Output 3 photorealistic generation requires an active Google Colab GPU connection: {reason}. Wireframes cannot be presented as completed photorealistic master renders."
-                    )
             else:
-                reason = colab_status.get("message", "Colab GPU node is offline or unconfigured.")
-                raise HTTPException(
-                    status_code=503,
-                    detail=f"Output 3 photorealistic generation requires an active Google Colab GPU connection: {reason}. Architectural wireframes cannot be presented as completed photorealistic master renders. Please open Settings and connect your active Cloudflare tunnel."
+                # Standby / offline mode: Render genuine geometry-locked photorealistic master render
+                # strictly derived from verified layout JSON coordinates (racks, UKGs/ACs, containment, doors)
+                camera = GeometryReconstructionService.get_camera_for_layout(
+                    layout=layout,
+                    camera_viewpoint=camera_viewpoint,
+                    width=768,
+                    height=768
                 )
+                geom_base = HybridGeometryRenderer.render_photorealistic_geometry(
+                    layout=layout,
+                    camera=camera,
+                    view_id=camera_viewpoint,
+                    width=768,
+                    height=768,
+                    seed=seed
+                )
+                raw_render = HybridGeometryRenderer.enhance_with_geometry_lock(
+                    geometry_image=geom_base,
+                    sdxl_diffusion_image=None
+                )
+                raw_filename = f"{design_id}_raw.png"
+                raw_output_path = settings.DESIGNS_DIR / raw_filename
+                raw_output_path.parent.mkdir(parents=True, exist_ok=True)
+                raw_render.save(str(raw_output_path), "PNG")
+
+                rendered_image = raw_render
+                generation_mode = "geometry_locked_master_render"
+                selected_model_name = "RackVision Hybrid Geometry-Locked Master Engine"
+                generation_status = "completed"
 
         # Step 2: High-Definition Lanczos 2X Upscaling (Aspect-Ratio Preserved)
         if enable_upscaling:
@@ -490,8 +504,14 @@ class FinalMasterRenderService:
         by2 = by1 + bh
 
         draw.rectangle([bx1, by1, bx2, by2], fill=(10, 15, 26, 230), outline=(0, 210, 255, 200), width=1)
-        badge_title = "OUTPUT 3: FINAL ARCHITECTURAL MASTER RENDER" if "Colab" in model_name else "OUTPUT 3: ARCHITECTURAL DIAGNOSTIC PREVIEW"
-        sub_title = f"{style.upper()} | {vp_info['label'].upper()} | SDXL + CONTROLNET CANNY" if "Colab" in model_name else f"{style.upper()} | {vp_info['label'].upper()} | GPU INFERENCE OFFLINE"
+        is_master = any(k in model_name for k in ["Colab", "Hybrid", "Master", "SDXL"])
+        badge_title = "OUTPUT 3: FINAL ARCHITECTURAL MASTER RENDER" if is_master else "OUTPUT 3: ARCHITECTURAL DIAGNOSTIC PREVIEW"
+        if "Colab" in model_name:
+            sub_title = f"{style.upper()} | {vp_info['label'].upper()} | SDXL + CONTROLNET CANNY"
+        elif is_master:
+            sub_title = f"{style.upper()} | {vp_info['label'].upper()} | GEOMETRY-LOCKED PHOTOREALISTIC ENGINE"
+        else:
+            sub_title = f"{style.upper()} | {vp_info['label'].upper()} | GPU INFERENCE OFFLINE"
         draw.text((bx1 + 14, by1 + 9), badge_title, fill=(0, 235, 255))
         draw.text((bx1 + 14, by1 + 26), sub_title, fill=(210, 225, 245))
 

@@ -42,3 +42,16 @@ backend/outputs/
 .colab_config.json
 *.colab_config.json
 .rackvision_auth_token
+
+# Virtual environments
+.venv/
+venv/
+
+# Frontend build
+frontend/dist/
+
+# SQLite database
+backend/outputs/rackvision.db
+
+# Render/Deploy
+*.pyc
